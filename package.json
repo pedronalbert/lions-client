@@ -1,0 +1,38 @@
+{
+  "name": "lions-client",
+  "version": "0.0.1",
+  "description": "Webclient for lions-server",
+  "main": "index.js",
+  "scripts": {
+    "build": "browserify -t babelify js/app.js -o bundle.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/pedronalbert/lions-client.git"
+  },
+  "author": "pedron.albert@gmail.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pedronalbert/lions-client/issues"
+  },
+  "homepage": "https://github.com/pedronalbert/lions-client#readme",
+  "dependencies": {
+    "babelify": "^6.3.0",
+    "browserify": "^11.0.1",
+    "gulp": "^3.9.0",
+    "gulp-sourcemaps": "^1.5.2",
+    "gulp-util": "^3.0.6",
+    "jquery": "^2.1.4",
+    "lodash": "^3.10.1",
+    "lodash.assign": "^3.2.0",
+    "radium": "^0.13.8",
+    "react": "^0.13.3",
+    "react-bootstrap": "^0.25.1",
+    "react-fontawesome": "^0.2.5",
+    "react-router": "^1.0.0-beta3",
+    "reflux": "^0.2.12",
+    "vinyl-buffer": "^1.0.0",
+    "vinyl-source-stream": "^1.1.0",
+    "watchify": "^3.3.1"
+  }
+}

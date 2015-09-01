@@ -1,0 +1,31 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  display: flex;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+.container .leftSidebar {
+  width: 250px;
+  height: 100vh;
+}
+
+.container .content {
+  flex: 1;
+}
+
+.header {
+  height: 50px;
+}
+
+.main {
+  border-radius: 5px;
+  margin: 14px;
+  border: 1px solid black;
+  padding: 16px;
+}
