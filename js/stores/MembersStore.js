@@ -116,7 +116,7 @@ let MembersStore = Reflux.createStore({
         withCredentials : true
      }
     }).done((member) => {
-      this.update(id, data);
+      this.update(id, member);
       MembersActions.update.completed(member);
     }).fail((response) => {
       console.log('MembersStore.onUpdate failed');

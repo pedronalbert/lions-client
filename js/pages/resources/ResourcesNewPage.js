@@ -6,6 +6,10 @@ import ResourcesActions from '../../actions/ResourcesActions';
 let ResourcesNewPage = React.createClass({
   mixins: [React.addons.LinkedStateMixin],
   
+  getInitialState() {
+    return {};
+  },
+  
   handleSubmit(e) {
     e.preventDefault();
     let data = {

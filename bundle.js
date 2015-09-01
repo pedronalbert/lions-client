@@ -1545,6 +1545,10 @@ var ResourcesNewPage = _reactAddons2['default'].createClass({
 
   mixins: [_reactAddons2['default'].addons.LinkedStateMixin],
 
+  getInitialState: function getInitialState() {
+    return {};
+  },
+
   handleSubmit: function handleSubmit(e) {
     e.preventDefault();
     var data = {
@@ -1869,7 +1873,7 @@ var MembersStore = _reflux2['default'].createStore({
         withCredentials: true
       }
     }).done(function (member) {
-      _this4.update(id, data);
+      _this4.update(id, member);
       _actionsMembersActions2['default'].update.completed(member);
     }).fail(function (response) {
       console.log('MembersStore.onUpdate failed');
@@ -1926,10 +1930,15 @@ var ResourcesStore = _reflux2['default'].createStore({
 
   listenables: [_actionsResourcesActions2['default']],
 
+  init: function init() {
+    this.onGetList();
+  },
+
   find: function find(id) {
     var resource = _lodash2['default'].find(this.resources, function (resource) {
       return resource.id == id;
     });
+
     return resource;
   },
 
@@ -1941,23 +1950,46 @@ var ResourcesStore = _reflux2['default'].createStore({
     this.trigger(this.resources);
   },
 
+  add: function add(resource) {
+    this.resources.push(resource);
+
+    this.trigger(this.resources);
+  },
+
+  update: function update(id, data) {
+    var index = _lodash2['default'].findIndex(this.resources, function (resource) {
+      return resource.id == id;
+    });
+
+    this.resources[index] = data;
+
+    this.trigger(this.resources);
+  },
+
   onGetList: function onGetList() {
     var _this = this;
 
-    _jquery2['default'].ajax({
-      url: this.url,
-      method: 'GET',
-      dataType: 'jsonp'
-    }).done(function (data) {
-      _this.resources = data;
-      _this.trigger(_this.resources);
-      _actionsResourcesActions2['default'].getList.completed(data);
-    }).fail(function (err) {
-      _actionsResourcesActions2['default'].getList.failed(err);
-    });
+    if (_lodash2['default'].isEmpty(this.resources)) {
+      _jquery2['default'].ajax({
+        url: this.url,
+        method: 'GET',
+        dataType: 'jsonp'
+      }).done(function (resources) {
+        _this.resources = resources;
+        _this.trigger(_this.resources);
+        _actionsResourcesActions2['default'].getList.completed(resources);
+      }).fail(function (err) {
+        _actionsResourcesActions2['default'].getList.failed(err);
+      });
+    } else {
+      this.trigger(this.resources);
+      _actionsResourcesActions2['default'].getList.completed(this.resources);
+    }
   },
 
   onCreate: function onCreate(data) {
+    var _this2 = this;
+
     _jquery2['default'].ajax({
       url: this.url,
       method: 'POST',
@@ -1965,21 +1997,22 @@ var ResourcesStore = _reflux2['default'].createStore({
       xhrFields: {
         withCredentials: true
       }
-    }).done(function (response) {
-      _actionsResourcesActions2['default'].create.completed(response.message);
+    }).done(function (resource) {
+      _this2.add(resource);
+      _actionsResourcesActions2['default'].create.completed(resource);
     }).fail(function (response) {
       _actionsResourcesActions2['default'].create.failed(response.message);
     });
   },
 
   onFind: function onFind(id) {
-    var _this2 = this;
+    var _this3 = this;
 
     var resource = this.find(id);
 
     if (_lodash2['default'].isEmpty(resource)) {
       _actionsResourcesActions2['default'].getList.triggerPromise().then(function (resources) {
-        resource = _this2.find(id);
+        resource = _this3.find(id);
 
         if (_lodash2['default'].isEmpty(resource)) {
           _actionsResourcesActions2['default'].find.failed('Recurso no encontrado');
@@ -1995,6 +2028,8 @@ var ResourcesStore = _reflux2['default'].createStore({
   },
 
   onUpdate: function onUpdate(id, data) {
+    var _this4 = this;
+
     _jquery2['default'].ajax({
       url: this.url + '/' + id,
       method: 'PUT',
@@ -2002,19 +2037,17 @@ var ResourcesStore = _reflux2['default'].createStore({
       xhrFields: {
         withCredentials: true
       }
-    }).done(function (response) {
-      _actionsResourcesActions2['default'].update.completed(response.message);
+    }).done(function (resource) {
+      _this4.update(id, resource);
+      _actionsResourcesActions2['default'].update.completed(resource);
     }).fail(function (response) {
+      console.log('ResourcesStore.onUpdate failed');
       _actionsResourcesActions2['default'].update.failed(response.message);
     });
   },
 
   onDelete: function onDelete(id) {
-    var _this3 = this;
-
-    this.remove(id);
-
-    return true;
+    var _this5 = this;
 
     _jquery2['default'].ajax({
       url: this.url + '/' + id,
@@ -2023,7 +2056,7 @@ var ResourcesStore = _reflux2['default'].createStore({
         withCredentials: true
       }
     }).done(function (response) {
-      _this3.remove(id);
+      _this5.remove(id);
     });
   }
 });

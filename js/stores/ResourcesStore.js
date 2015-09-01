@@ -9,10 +9,15 @@ let ResourcesStore = Reflux.createStore({
 
   listenables: [ResourcesActions],
 
+  init() {
+    this.onGetList();
+  },
+
   find(id) {
     let resource = _.find(this.resources, (resource) => {
       return resource.id == id;
     });
+
     return resource;
   },
 
@@ -24,18 +29,39 @@ let ResourcesStore = Reflux.createStore({
     this.trigger(this.resources);
   },
 
+  add(resource) {
+    this.resources.push(resource);
+
+    this.trigger(this.resources);
+  },
+
+  update(id, data) {
+    let index =_.findIndex(this.resources, (resource) => {
+      return resource.id == id;
+    });
+
+    this.resources[index] = data;
+
+    this.trigger(this.resources);
+  },
+
   onGetList() {
-    $.ajax({
-      url: this.url,
-      method: 'GET',
-      dataType: 'jsonp'
-    }).done((data) => {
-      this.resources = data;
+    if (_.isEmpty(this.resources)) {
+      $.ajax({
+        url: this.url,
+        method: 'GET',
+        dataType: 'jsonp'
+      }).done((resources) => {
+        this.resources = resources;
+        this.trigger(this.resources);
+        ResourcesActions.getList.completed(resources);
+      }).fail((err) => {
+        ResourcesActions.getList.failed(err);
+      })
+    } else {
       this.trigger(this.resources);
-      ResourcesActions.getList.completed(data);
-    }).fail((err) => {
-      ResourcesActions.getList.failed(err);
-    })
+      ResourcesActions.getList.completed(this.resources);
+    }
   },
 
   onCreate(data) {
@@ -46,8 +72,9 @@ let ResourcesStore = Reflux.createStore({
       xhrFields : {
         withCredentials : true
      }
-    }).done((response) => {
-      ResourcesActions.create.completed(response.message);
+    }).done((resource) => {
+      this.add(resource);
+      ResourcesActions.create.completed(resource);
     }).fail((response) => {
       ResourcesActions.create.failed(response.message);
     })
@@ -86,18 +113,16 @@ let ResourcesStore = Reflux.createStore({
       xhrFields : {
         withCredentials : true
      }
-    }).done((response) => {
-      ResourcesActions.update.completed(response.message);
+    }).done((resource) => {
+      this.update(id, resource);
+      ResourcesActions.update.completed(resource);
     }).fail((response) => {
+      console.log('ResourcesStore.onUpdate failed');
       ResourcesActions.update.failed(response.message);
     });
   },
 
   onDelete(id) {
-    this.remove(id);
-
-    return true;
-    
     $.ajax({
       url: this.url + '/' + id,
       method: 'DELETE',
