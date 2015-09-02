@@ -1,15 +1,15 @@
 import React from 'react/addons';
 import {Input, ButtonInput} from 'react-bootstrap';
 import Radium from 'radium';
-import ResourcesActions from '../../actions/ResourcesActions';
+import ResourcesActions from '../../../../actions/ResourcesActions';
 
-let ResourcesNewPage = React.createClass({
+let ResourcesEditView = React.createClass({
   mixins: [React.addons.LinkedStateMixin],
-  
-  getInitialState() {
-    return {};
+
+  componentDidMount() {
+    this.updateResourceData(this.props.id);
   },
-  
+
   handleSubmit(e) {
     e.preventDefault();
     let data = {
@@ -20,8 +20,8 @@ let ResourcesNewPage = React.createClass({
     };
 
     ResourcesActions
-      .create
-      .triggerPromise(data)
+      .update
+      .triggerPromise(this.props.params.id, data)
       .then(function (response) {
         console.log(response);
       })
@@ -31,6 +31,18 @@ let ResourcesNewPage = React.createClass({
   },
 
 
+  updateResourceData(id) {
+    ResourcesActions
+      .find
+      .triggerPromise(this.props.params.id)
+      .then((response) => {
+        this.setState(response);
+      })
+      .catch((response) => {
+        console.log(response);
+      }) 
+  },
+
   render() {
 
     return <div>
@@ -39,7 +51,7 @@ let ResourcesNewPage = React.createClass({
         <Input valueLink={this.linkState('available')} type="text" label="Disponibles" placeholder="Disponibles"/>
         <Input valueLink={this.linkState('using')} type="text" label="Usando" placeholder="Usando"/>
         <Input valueLink={this.linkState('damaged')} type="text" label="Dañados" placeholder="Dañados"/>
-        <ButtonInput type="submit" value="Agregar Recurso"/>
+        <ButtonInput type="submit" value="Editar Recurso"/>
       </form>
     </div>
   }
@@ -52,4 +64,4 @@ let styles = {
   },
 
 };
-export default Radium(ResourcesNewPage);
+export default Radium(ResourcesEditView);

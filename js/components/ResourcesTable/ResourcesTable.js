@@ -9,7 +9,7 @@ import _ from 'lodash';
 
 let ResourcesTable = React.createClass({
   mixins: [Reflux.connect(ResourcesStore, 'resources'), Navigation],
-
+  
   componentDidMount() {
     ResourcesActions.getList();
   },

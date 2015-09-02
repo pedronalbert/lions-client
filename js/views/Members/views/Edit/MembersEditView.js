@@ -1,9 +1,9 @@
 import React from 'react/addons';
 import {Input, ButtonInput} from 'react-bootstrap';
 import Radium from 'radium';
-import MembersActions from '../../actions/MembersActions';
+import MembersActions from '../../../../actions/MembersActions';
 
-let MembersEditPage = React.createClass({
+let MembersEditView = React.createClass({
   mixins: [React.addons.LinkedStateMixin],
 
   componentDidMount() {
@@ -66,4 +66,4 @@ let styles = {
   },
 
 };
-export default Radium(MembersEditPage);
+export default Radium(MembersEditView);

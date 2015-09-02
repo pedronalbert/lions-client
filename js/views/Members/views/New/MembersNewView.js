@@ -1,9 +1,9 @@
 import React from 'react';
 import {Input, ButtonInput} from 'react-bootstrap';
 import Radium from 'radium';
-import MembersActions from '../../actions/MembersActions';
+import MembersActions from '../../../../actions/MembersActions';
 
-let MembersNewPage = React.createClass({ 
+let MembersNewView = React.createClass({ 
   handleSubmit(e) {
     e.preventDefault();
     let data = this.getFormData();
@@ -52,4 +52,4 @@ let styles = {
   },
 
 };
-export default Radium(MembersNewPage);
+export default Radium(MembersNewView);

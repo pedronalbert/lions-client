@@ -50,7 +50,6 @@ let MembersStore = Reflux.createStore({
       $.ajax({
         url: this.url,
         method: 'GET',
-        dataType: 'jsonp'
       }).done((members) => {
         this.members = members;
         this.trigger(this.members);

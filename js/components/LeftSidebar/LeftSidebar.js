@@ -1,10 +1,10 @@
 import React from 'react';
 import Radium from 'radium';
-import Menu from './Menu';
+import Menu from './components/Menu';
 
 let styles = {
   base: {
-    background: '#5D5F61',
+    background: '#4D4E50',
     width: '100%',
     height: '100%'
   },

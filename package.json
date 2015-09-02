@@ -18,6 +18,7 @@
   "homepage": "https://github.com/pedronalbert/lions-client#readme",
   "dependencies": {
     "babelify": "^6.3.0",
+    "browser-sync": "^2.8.2",
     "browserify": "^11.0.1",
     "gulp": "^3.9.0",
     "gulp-sourcemaps": "^1.5.2",
@@ -28,6 +29,7 @@
     "radium": "^0.13.8",
     "react": "^0.13.3",
     "react-bootstrap": "^0.25.1",
+    "react-deep-link-state": "0.0.2",
     "react-fontawesome": "^0.2.5",
     "react-router": "^1.0.0-beta3",
     "reflux": "^0.2.12",

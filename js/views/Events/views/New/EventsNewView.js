@@ -1,10 +1,10 @@
 import React from 'react/addons';
 import {Input, ButtonInput} from 'react-bootstrap';
 import Radium from 'radium';
-import EventsActions from '../../actions/EventsActions';
-import EventsStore from '../../stores/EventsStore';
+import EventsActions from '../../../../actions/EventsActions';
+import EventsStore from '../../../../stores/EventsStore';
 
-let EventsNewPage = React.createClass({
+let EventsNewView = React.createClass({
   mixins: [React.addons.LinkedStateMixin], 
   
   handleSubmit(e) {
@@ -19,7 +19,6 @@ let EventsNewPage = React.createClass({
       active: 1
     };
 
-    console.log(data);
     EventsActions
       .create
       .triggerPromise(data)
@@ -57,4 +56,4 @@ let styles = {
   },
 
 };
-export default Radium(EventsNewPage);
+export default Radium(EventsNewView);

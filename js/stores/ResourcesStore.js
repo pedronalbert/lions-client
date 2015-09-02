@@ -45,12 +45,11 @@ let ResourcesStore = Reflux.createStore({
     this.trigger(this.resources);
   },
 
-  onGetList() {
-    if (_.isEmpty(this.resources)) {
+  onGetList(forceUpdate = false) {
+    if (_.isEmpty(this.resources) || forceUpdate) {
       $.ajax({
         url: this.url,
-        method: 'GET',
-        dataType: 'jsonp'
+        method: 'GET'
       }).done((resources) => {
         this.resources = resources;
         this.trigger(this.resources);

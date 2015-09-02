@@ -13,10 +13,12 @@ body {
 .container .leftSidebar {
   width: 250px;
   height: 100vh;
+  position: fixed;
 }
 
 .container .content {
   flex: 1;
+  margin-left: 250px;
 }
 
 .header {
