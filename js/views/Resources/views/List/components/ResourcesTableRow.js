@@ -3,6 +3,7 @@ import ResourcesActions from '../../../../../actions/ResourcesActions';
 import FontAwesome from 'react-fontawesome';
 import {Button, ButtonToolbar} from 'react-bootstrap'; 
 import {Navigation} from 'react-router';
+import Radium from 'radium';
 
 let ResourcesTableRow = React.createClass({
   mixins: [Navigation],
@@ -24,15 +25,15 @@ let ResourcesTableRow = React.createClass({
   render() {
     return (<tr>
       <td>{this.props.resource.type}</td>
-      <td>{this.props.resource.available}</td>
-      <td>{this.props.resource.using}</td>
-      <td>{this.props.resource.damaged}</td>
+      <td style={styles.textCenter}>{this.props.resource.available}</td>
+      <td style={styles.textCenter}>{this.props.resource.using}</td>
+      <td style={styles.textCenter}>{this.props.resource.damaged}</td>
       <td>
         <ButtonToolbar>
-          <Button bsStyle="primary" onClick={this.handleEdit.bind(this, this.props.resource.id)}>
+          <Button bsStyle="primary" bsSize="small" onClick={this.handleEdit.bind(this, this.props.resource.id)}>
             <FontAwesome name="pencil" />
           </Button>
-          <Button bsStyle="danger" onClick={this.handleDelete.bind(this, this.props.resource.id)}>
+          <Button bsStyle="danger" bsSize="small" onClick={this.handleDelete.bind(this, this.props.resource.id)}>
             <FontAwesome name="trash-o" />
           </Button>
         </ButtonToolbar>
@@ -41,4 +42,11 @@ let ResourcesTableRow = React.createClass({
   }
 });
 
-export default ResourcesTableRow;
+let styles = {
+  textCenter: {
+    textAlign: 'center'
+  }
+};
+
+
+export default Radium(ResourcesTableRow);

@@ -1,6 +1,7 @@
 body {
   margin: 0;
   padding: 0;
+  background: #E2E2E2;
 }
 
 .container {
@@ -17,7 +18,6 @@ body {
 }
 
 .container .content {
-  flex: 1;
   margin-left: 250px;
 }
 
@@ -27,7 +27,11 @@ body {
 
 .main {
   border-radius: 5px;
-  margin: 14px;
-  border: 1px solid black;
-  padding: 16px;
+  margin: 30px 20px;
+  padding: 30px;
+  background: white;
+}
+
+.page-title {
+  margin-bottom: 25px;
 }
