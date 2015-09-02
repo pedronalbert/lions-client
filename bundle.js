@@ -249,44 +249,39 @@ var _MenuItem = require('./MenuItem');
 
 var _MenuItem2 = _interopRequireDefault(_MenuItem);
 
+var _reactRouter = require('react-router');
+
 var Menu = _react2['default'].createClass({
   displayName: 'Menu',
 
-  membersItems: [{ title: 'Listar miembros', icon: 'list', link: '#/members' }, { title: 'Agregar miembro', icon: 'user-plus', link: '#/members/new' }],
-
-  resourcesItems: [{ title: 'Listar Recursos', icon: 'list', link: '#/resources' }, { title: 'Agregar Recurso', icon: 'plus', link: '#/resources/new' }],
-
-  eventsItems: [{ title: 'Lista de Eventos', icon: 'list', link: '#/events' }, { title: 'Agregar Evento', icon: 'plus', link: '#/events/new' }],
-
   render: function render() {
-
     return _react2['default'].createElement(
       'div',
       { style: styles.base },
       _react2['default'].createElement(
         'div',
         { style: styles.title },
-        ' Eventos '
+        _react2['default'].createElement(_reactFontawesome2['default'], { name: 'calendar' }),
+        ' Eventos'
       ),
-      this.eventsItems.map(function (item) {
-        return _react2['default'].createElement(_MenuItem2['default'], { key: item.id, item: item });
-      }),
+      _react2['default'].createElement(_MenuItem2['default'], { href: 'events', text: 'Lista de eventos', icon: 'list' }),
+      _react2['default'].createElement(_MenuItem2['default'], { href: 'events/new', text: 'Registrar Evento', icon: 'calendar-plus-o' }),
       _react2['default'].createElement(
         'div',
         { style: styles.title },
-        ' Miembros '
+        _react2['default'].createElement(_reactFontawesome2['default'], { name: 'cubes' }),
+        ' Inventario'
       ),
-      this.membersItems.map(function (item) {
-        return _react2['default'].createElement(_MenuItem2['default'], { key: item.id, item: item });
-      }),
+      _react2['default'].createElement(_MenuItem2['default'], { href: 'resources', text: 'Lista de Recursos', icon: 'list' }),
+      _react2['default'].createElement(_MenuItem2['default'], { href: 'resources/new', text: 'Registrar Recurso', icon: 'cart-plus' }),
       _react2['default'].createElement(
         'div',
         { style: styles.title },
-        ' Recursos '
+        _react2['default'].createElement(_reactFontawesome2['default'], { name: 'users' }),
+        ' Miembros'
       ),
-      this.resourcesItems.map(function (item) {
-        return _react2['default'].createElement(_MenuItem2['default'], { key: item.id, item: item });
-      })
+      _react2['default'].createElement(_MenuItem2['default'], { href: 'members', text: 'Lista de Miembros', icon: 'list' }),
+      _react2['default'].createElement(_MenuItem2['default'], { href: 'members/new', text: 'Registrar Miembro', icon: 'user-plus' })
     );
   }
 });
@@ -309,7 +304,7 @@ Menu = (0, _radium2['default'])(Menu);
 exports['default'] = Menu;
 module.exports = exports['default'];
 
-},{"./MenuItem":7,"radium":44,"react":488,"react-fontawesome":284}],7:[function(require,module,exports){
+},{"./MenuItem":7,"radium":44,"react":488,"react-fontawesome":284,"react-router":307}],7:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -330,6 +325,8 @@ var _reactFontawesome = require('react-fontawesome');
 
 var _reactFontawesome2 = _interopRequireDefault(_reactFontawesome);
 
+var _reactRouter = require('react-router');
+
 var MenuItem = _react2['default'].createClass({
   displayName: 'MenuItem',
 
@@ -338,13 +335,13 @@ var MenuItem = _react2['default'].createClass({
       'div',
       { style: styles.base },
       _react2['default'].createElement(
-        'a',
-        { href: this.props.item.link, style: styles.link },
-        _react2['default'].createElement(_reactFontawesome2['default'], { name: this.props.item.icon, style: styles.icon }),
+        _reactRouter.Link,
+        { to: this.props.href, style: styles.link },
+        _react2['default'].createElement(_reactFontawesome2['default'], { name: this.props.icon, style: styles.icon }),
         _react2['default'].createElement(
           'span',
           null,
-          this.props.item.title
+          this.props.text
         )
       )
     );
@@ -374,7 +371,7 @@ var styles = {
 exports['default'] = (0, _radium2['default'])(MenuItem);
 module.exports = exports['default'];
 
-},{"radium":44,"react":488,"react-fontawesome":284}],8:[function(require,module,exports){
+},{"radium":44,"react":488,"react-fontawesome":284,"react-router":307}],8:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {

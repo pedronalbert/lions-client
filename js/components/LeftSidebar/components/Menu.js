@@ -2,39 +2,22 @@ import React from 'react';
 import Radium from 'radium';
 import FontAwesome from 'react-fontawesome';
 import MenuItem from './MenuItem'; 
+import {State, Link} from 'react-router';
 
 let Menu = React.createClass({
-  membersItems: [
-    {title: 'Listar miembros', icon: 'list', link: '#/members'},
-    {title: 'Agregar miembro', icon: 'user-plus', link: '#/members/new'}
-  ],
-
-  resourcesItems: [
-    {title: 'Listar Recursos', icon: 'list', link: '#/resources'},
-    {title: 'Agregar Recurso', icon: 'plus', link: '#/resources/new'}
-  ],
-
-  eventsItems: [
-    {title: 'Lista de Eventos', icon: 'list', link: '#/events'},
-    {title: 'Agregar Evento', icon: 'plus', link: '#/events/new'}
-  ],
-
   render() {
-
     return <div style={styles.base}>
-        <div style={styles.title}> Eventos </div>
-        {this.eventsItems.map((item) => {
-          return <MenuItem key={item.id} item={item} />
-        })}
-        <div style={styles.title}> Miembros </div>
-        {this.membersItems.map((item) => {
-          return <MenuItem key={item.id} item={item} />
-        })}
-        <div style={styles.title}> Recursos </div>
-        {this.resourcesItems.map((item) => {
-          return <MenuItem key={item.id} item={item} />
-        })}
+      <div style={styles.title}><FontAwesome name="calendar" /> Eventos</div>
+      <MenuItem href="events" text="Lista de eventos" icon="list" />
+      <MenuItem href="events/new" text="Registrar Evento" icon="calendar-plus-o" />
 
+      <div style={styles.title}><FontAwesome name="cubes" /> Inventario</div>
+      <MenuItem href="resources" text="Lista de Recursos" icon="list" />
+      <MenuItem href="resources/new" text="Registrar Recurso" icon="cart-plus" />
+
+      <div style={styles.title}><FontAwesome name="users" /> Miembros</div>
+      <MenuItem href="members" text="Lista de Miembros" icon="list" />
+      <MenuItem href="members/new" text="Registrar Miembro" icon="user-plus" />
     </div>
   }
 });
