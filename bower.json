@@ -1,0 +1,21 @@
+{
+  "name": "lions-client",
+  "version": "0.0.1",
+  "authors": [
+    "Alberto Pedron <pedron.albert@gmail.com>"
+  ],
+  "main": "index.html",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "~3.3.5",
+    "font-awesome": "~4.4.0",
+    "toastr": "~2.1.2"
+  }
+}

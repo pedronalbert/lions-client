@@ -5,7 +5,7 @@ let ResourcesActions = Reflux.createActions({
   'create': { asyncResult: true },
   'find': { asyncResult: true },
   'update': { asyncResult: true},
-  'delete': {}
+  'delete': { asyncResult: true}
 });
 
 export default ResourcesActions;

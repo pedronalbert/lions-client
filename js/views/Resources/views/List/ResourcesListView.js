@@ -29,7 +29,8 @@ let ResourcesListView = React.createClass({
 
 let styles = {
   base: {
-    maxWidth: '500px'
+    width: '500px',
+    margin: 'auto'
   }
 }
 

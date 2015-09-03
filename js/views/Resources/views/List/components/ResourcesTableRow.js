@@ -18,7 +18,12 @@ let ResourcesTableRow = React.createClass({
     let confirm = window.confirm('¿Está seguro de que desea eliminar este recurso?');
 
     if(confirm) {
-      ResourcesActions.delete(id);
+      ResourcesActions
+        .delete
+        .triggerPromise(id)
+        .then((response) => {
+          window.toastr.success('Recurso ha sido eliminado');
+        });
     }
   },
 

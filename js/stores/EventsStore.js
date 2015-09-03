@@ -5,7 +5,7 @@ import _ from 'lodash';
 import ResourcesActions from '../actions/ResourcesActions';
 
 let EventsStore = Reflux.createStore({
-  url: 'http://localhost/event',
+  url: 'http://server.lions.com/event',
   events: [],
 
   listenables: [EventsActions],

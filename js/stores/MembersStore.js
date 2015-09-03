@@ -4,7 +4,7 @@ import $ from 'jquery';
 import _ from 'lodash';
 
 let MembersStore = Reflux.createStore({
-  url: 'http://localhost/member',
+  url: 'http://server.lions.com/member',
   members: [],
 
   listenables: [MembersActions],

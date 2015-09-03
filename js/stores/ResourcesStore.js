@@ -4,7 +4,7 @@ import $ from 'jquery';
 import _ from 'lodash';
 
 let ResourcesStore = Reflux.createStore({
-  url: 'http://localhost/resource',
+  url: 'http://server.lions.com/resource',
   resources: [],
 
   listenables: [ResourcesActions],
@@ -30,9 +30,14 @@ let ResourcesStore = Reflux.createStore({
   },
 
   add(resource) {
-    this.resources.push(resource);
+    ResourcesActions
+      .getList
+      .triggerPromise()
+      .then((resources) => {
+        this.resources.push(resource);
+        this.trigger(this.resources);
+      })
 
-    this.trigger(this.resources);
   },
 
   update(id, data) {
@@ -54,8 +59,8 @@ let ResourcesStore = Reflux.createStore({
         this.resources = resources;
         this.trigger(this.resources);
         ResourcesActions.getList.completed(resources);
-      }).fail((err) => {
-        ResourcesActions.getList.failed(err);
+      }).fail((xhr, status) => {
+        ResourcesActions.getList.failed('Error en el servidor!');
       })
     } else {
       this.trigger(this.resources);
@@ -74,8 +79,12 @@ let ResourcesStore = Reflux.createStore({
     }).done((resource) => {
       this.add(resource);
       ResourcesActions.create.completed(resource);
-    }).fail((response) => {
-      ResourcesActions.create.failed(response.message);
+    }).fail((xhr) => {
+      if (xhr.status == 400) {
+        ResourcesActions.create.failed(xhr.responseJSON.error);   
+      } else {
+        ResourcesActions.create.failed('Error en el servidor');
+      }
     })
   },
 
@@ -130,6 +139,7 @@ let ResourcesStore = Reflux.createStore({
       }
     }).done((response) => {
       this.remove(id);
+      ResourcesActions.delete.completed();
     })
   }
 });

@@ -1,7 +1,6 @@
 import React from 'react';
 import { Router, Route, Link } from 'react-router';
 import { history } from 'react-router/lib/HashHistory';
-
 import LeftSidebar from './components/LeftSidebar/LeftSidebar';
 
 //Members views
@@ -16,20 +15,22 @@ import EventsEditView from './views/Events/views/Edit/EventsEditView';
 import EventsListView from './views/Events/views/List/EventsListView';
 
 
-let App = React.createClass({
+let App = React.createClass({ 
   render() {
-    return <div className="container">
-          <div className="leftSidebar">
-            <LeftSidebar/>
+    return (
+      <div className="container">
+        <div className="leftSidebar">
+          <LeftSidebar/>
+        </div>
+        <div className="content">
+          <div className="header">
           </div>
-          <div className="content">
-            <div className="header">
-            </div>
-            <div className="main">
-              {this.props.children}
-            </div>
+          <div className="main">
+            {this.props.children}
           </div>
-    </div>
+        </div>
+      </div>
+    );
   }
 });
 
