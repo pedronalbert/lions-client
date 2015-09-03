@@ -18,9 +18,9 @@ let ResourcesEditView = React.createClass({
 
   validatorTypes: {
     type: Joi.string().required().label('Tipo'),
-    available: Joi.number().required().label('Disponibles'),
-    using: Joi.number().required().label('Usando'),
-    damaged: Joi.number().required().label('Dañados')
+    available: Joi.number().min(0).required().label('Disponibles'),
+    using: Joi.number().min(0).required().label('Usando'),
+    damaged: Joi.number().min(0).required().label('Dañados')
   },
 
   propTypes: {
