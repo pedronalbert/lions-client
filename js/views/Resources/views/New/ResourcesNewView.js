@@ -53,12 +53,7 @@ let ResourcesNewView = React.createClass({
       } else {
         this.setFormDisabled();
 
-        let data = {
-          type: this.state.type,
-          available: this.state.available,
-          using: this.state.using,
-          damaged: this.state.damaged
-        };
+        let data = this.getValidatorData();
 
         ResourcesActions
           .create
