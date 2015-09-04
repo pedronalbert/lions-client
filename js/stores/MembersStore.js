@@ -30,9 +30,13 @@ let MembersStore = Reflux.createStore({
   },
 
   add(member) {
-    this.members.push(member);
-
-    this.trigger(this.members);
+    MembersActions
+      .getList
+      .triggerPromise()
+      .then((members) => {
+        this.members.push(member);
+        this.trigger(this.members);
+      })
   },
 
   update(id, data) {
@@ -45,8 +49,8 @@ let MembersStore = Reflux.createStore({
     this.trigger(this.members);
   },
 
-  onGetList() {
-    if (_.isEmpty(this.members)) {
+  onGetList(forceUpdate = false) {
+    if (_.isEmpty(this.members) || forceUpdate) {
       $.ajax({
         url: this.url,
         method: 'GET',
@@ -54,9 +58,8 @@ let MembersStore = Reflux.createStore({
         this.members = members;
         this.trigger(this.members);
         MembersActions.getList.completed(members);
-      }).fail((err) => {
-        console.log('ERROR MEmbersStore.onGetList()');
-        MembersActions.getList.failed(err);
+      }).fail((xhr) => {
+        MembersActions.getList.failed('Error en el servidor');
       })
     } else {
       this.trigger(this.members);
@@ -75,9 +78,12 @@ let MembersStore = Reflux.createStore({
     }).done((member) => {
       this.add(member);
       MembersActions.create.completed(member);
-    }).fail((response) => {
-      console.log('ERROR MEmbersStore.onCreate()');
-      MembersActions.create.failed(response.message);
+    }).fail((xhr) => {
+      if (xhr.status == 400) {
+        MembersActions.create.failed(xhr.responseJSON.error);   
+      } else {
+        MembersActions.create.failed('Error en el servidor');
+      }
     })
   },
 
@@ -118,7 +124,6 @@ let MembersStore = Reflux.createStore({
       this.update(id, member);
       MembersActions.update.completed(member);
     }).fail((response) => {
-      console.log('MembersStore.onUpdate failed');
       MembersActions.update.failed(response.message);
     });
   },

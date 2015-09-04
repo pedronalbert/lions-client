@@ -4,6 +4,8 @@ import MembersActions from '../../../../actions/MembersActions';
 import MembersStore from '../../../../stores/MembersStore';
 import MembersTable from './components/MembersTable';
 import {Input} from 'react-bootstrap';
+import FontAwesome from 'react-fontawesome';
+import Radium from 'radium';
 
 let MembersLisView = React.createClass({
   mixins: [
@@ -20,13 +22,38 @@ let MembersLisView = React.createClass({
   },
 
   render() {
+    const InputAddon = <FontAwesome name="search" />;
+
     return (
-      <div>
-        <Input type="text" valueLink={this.linkState('filterWord')} />
+      <div style={styles.base}>
+        <h3 className="page-title">
+          <FontAwesome name="users" /> 
+          Lista de Miembros
+        </h3>
+
+        <Input 
+          type="text" 
+          style={styles.inputSearch}
+          valueLink={this.linkState('filterWord')}
+          label="Buscar"
+          placeholder="Nombre, Apellido o Cedula..." 
+          addonBefore={InputAddon} />
+
         <MembersTable members={this.state.members} filter={this.state.filterWord} />
       </div>
     );
   }
 });
 
-export default MembersLisView;
+let styles = {
+  inputSearch: {
+    width: '400px'
+  },
+
+  base: {
+    minWidth: '600px',
+    maxWidth: '800px',
+    margin: 'auto'
+  }
+}
+export default Radium(MembersLisView);

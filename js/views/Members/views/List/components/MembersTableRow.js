@@ -17,7 +17,12 @@ let MembersTableRow = React.createClass({
     let confirm = window.confirm('¿Está seguro de que desea eliminar este miembro?');
 
     if(confirm) {
-      MembersActions.delete(id);
+      MembersActions
+        .delete
+        .triggerPromise(id)
+        .then((response) => {
+          window.toastr.success('Miembro ha sido eliminado');
+        });
     }
   },
 
@@ -31,10 +36,10 @@ let MembersTableRow = React.createClass({
         <td>{this.props.member.phone}</td>
         <td>
           <ButtonToolbar>
-            <Button bsStyle="primary" onClick={this.handleEdit.bind(this, this.props.member.id)}>
+            <Button bsStyle="primary" bsSize="small" onClick={this.handleEdit.bind(this, this.props.member.id)}>
               <FontAwesome name="pencil" />
             </Button>
-            <Button bsStyle="danger" onClick={this.handleDelete.bind(this, this.props.member.id)}>
+            <Button bsStyle="danger" bsSize="small" onClick={this.handleDelete.bind(this, this.props.member.id)}>
               <FontAwesome name="trash-o" />
             </Button>
           </ButtonToolbar>

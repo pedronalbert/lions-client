@@ -37,7 +37,6 @@ let ResourcesStore = Reflux.createStore({
         this.resources.push(resource);
         this.trigger(this.resources);
       })
-
   },
 
   update(id, data) {
@@ -125,7 +124,6 @@ let ResourcesStore = Reflux.createStore({
       this.update(id, resource);
       ResourcesActions.update.completed(resource);
     }).fail((response) => {
-      console.log('ResourcesStore.onUpdate failed');
       ResourcesActions.update.failed(response.message);
     });
   },

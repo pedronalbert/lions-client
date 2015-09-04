@@ -1,8 +1,8 @@
 import React from 'react';
-import {Table} from 'react-bootstrap';
+import {Table, Well} from 'react-bootstrap';
 import MembersTableRow from './MembersTableRow';
 import _ from 'lodash';
-
+import Radium from 'radium';
 
 let MembersTable = React.createClass({
   getInitialProps() {
@@ -30,25 +30,39 @@ let MembersTable = React.createClass({
   render() {
     let members = this.getFilteredMembers(this.props.filter);
 
-    return (
-      <Table bordered condensed> 
-        <tr>
-          <th>Nombre</th>
-          <th>Apellido</th>
-          <th>Cedula</th>
-          <th>Correo</th>
-          <th>Telefono</th>
-          <th>Editar</th>
-        </tr>
+    if (this.props.members.length > 0) {
+      return (
+        <Table responsive condensed> 
+          <tr>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Cedula</th>
+            <th>Correo</th>
+            <th>Telefono</th>
+            <th style={styles.adminCol}>Editar</th>
+          </tr>
 
-        <tbody>
-          {members.map((member) => {
-            return <MembersTableRow key={member.id} member={member} />
-          })}
-        </tbody>
-      </Table>
-    );
+          <tbody>
+            {members.map((member) => {
+              return <MembersTableRow key={member.id} member={member} />
+            })}
+          </tbody>
+        </Table>
+      );
+    } else {
+      return (
+        <Well>
+          No hay miembros registrados!
+        </Well>
+      );
+    }
   }
 });
   
-export default MembersTable;
+let styles = {
+  adminCol: {
+    width: '90px'
+  }
+}
+
+export default Radium(MembersTable);
