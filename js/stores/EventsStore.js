@@ -36,14 +36,16 @@ let EventsStore = Reflux.createStore({
     this.trigger(this.events);
   },
 
-  update(id, data) {
+  update(id, newData) {
     let index =_.findIndex(this.events, (event) => {
       return event.id == id;
     });
 
-    this.events[index] = data;
+    if (index >= 0) {  
+      this.events[index] = newData;
+      this.trigger(this.events);
+    }
 
-    this.trigger(this.events);
   },
 
   addLocalMember(eventId, member) {

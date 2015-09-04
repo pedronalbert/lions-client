@@ -3,9 +3,10 @@ import Reflux from 'reflux';
 import EventsActions from '../../../../actions/EventsActions';
 import EventsStore from '../../../../stores/EventsStore';
 import EventsListTable from './components/EventsListTable';
-import {Input} from 'react-bootstrap';
+import {Input, Tabs, Tab} from 'react-bootstrap';
 import FontAwesome from 'react-fontawesome';
 import Radium from 'radium';
+import _ from 'lodash';
 
 let MembersLisView = React.createClass({
   mixins: [
@@ -21,7 +22,26 @@ let MembersLisView = React.createClass({
     EventsActions.getList();
   },
 
+  getActiveEvents() {
+    let events = _.filter(this.state.events, (event) => {
+      return event.active == 1;
+    });
+
+    return events;
+  },
+
+  getFinishedEvents() {
+    let events = _.filter(this.state.events, (event) => {
+      return event.active == 0;
+    });
+
+    return events;
+  },
+
   render() {
+    let activeEvents = this.getActiveEvents();
+    let finishedEvents = this.getFinishedEvents();
+
     const InputAddon = <FontAwesome name="search" />;
 
     return (
@@ -30,7 +50,14 @@ let MembersLisView = React.createClass({
           <FontAwesome name="calendar" /> Lista de Eventos
         </h3>
 
-        <EventsListTable events={this.state.events} />
+        <Tabs defaultActiveKey={1}>
+          <Tab eventKey={1} title="Activos">
+            <EventsListTable events={activeEvents} />
+          </Tab>
+          <Tab eventKey={2} title="Finalizados">
+            <EventsListTable events={finishedEvents} />
+          </Tab>
+        </Tabs>
       </div>
     );
   }
