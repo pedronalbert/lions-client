@@ -27,8 +27,7 @@ let MembersLisView = React.createClass({
     return (
       <div style={styles.base}>
         <h3 className="page-title">
-          <FontAwesome name="users" /> 
-          Lista de Miembros
+          <FontAwesome name="users" /> Lista de Miembros
         </h3>
 
         <Input 

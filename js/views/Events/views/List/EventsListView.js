@@ -1,28 +1,45 @@
-import React from 'react';
+import React from 'react/addons';
 import Reflux from 'reflux';
 import EventsActions from '../../../../actions/EventsActions';
 import EventsStore from '../../../../stores/EventsStore';
-import {Table, ButtonToolbar, Button} from 'react-bootstrap';
-import {Navigation} from 'react-router';
-import FontAwesome from 'react-fontawesome';
 import EventsListTable from './components/EventsListTable';
+import {Input} from 'react-bootstrap';
+import FontAwesome from 'react-fontawesome';
+import Radium from 'radium';
 
-let EventsListView = React.createClass({
-  mixins: [Reflux.connect(EventsStore, 'events'), Navigation],
-
+let MembersLisView = React.createClass({
+  mixins: [
+    Reflux.connect(EventsStore, 'events'),
+    React.addons.LinkedStateMixin
+  ],
+  
   getInitialState() {
     return {events: []};
   },
-  
+
   componentDidMount() {
     EventsActions.getList();
   },
 
   render() {
+    const InputAddon = <FontAwesome name="search" />;
+
     return (
-      <EventsListTable events={this.state.events} />
+      <div style={styles.base}>
+        <h3 className="page-title">
+          <FontAwesome name="calendar" /> Lista de Eventos
+        </h3>
+
+        <EventsListTable events={this.state.events} />
+      </div>
     );
   }
 });
 
-export default EventsListView;
+let styles = {
+  base: {
+    width: '600px',
+    margin: 'auto'
+  }
+}
+export default Radium(MembersLisView);

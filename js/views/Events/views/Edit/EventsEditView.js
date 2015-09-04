@@ -6,14 +6,19 @@ import MembersActions from '../../../../actions/MembersActions';
 import MembersStore from '../../../../stores/MembersStore';
 import ResourcesStore from '../../../../stores/ResourcesStore';
 import ResourcesActions from '../../../../actions/ResourcesActions';
-import {Input, ButtonInput, ButtonToolbar, Button, Table} from 'react-bootstrap';
+import {Input, ButtonInput, ButtonToolbar, Button, Table, Row, Col} from 'react-bootstrap';
 import FontAwesome from 'react-fontawesome';
 import _ from 'lodash';
 import DeepLinkedStateMixin from 'react-deep-link-state';
-import SelectableMembersTable from './components/SelectableMembersTable';
-import EventMembersTable from './components/EventMembersTable';
-import SelectableResourcesTable from './components/SelectableResourcesTable'; 
-import EventResourcesTable from './components/EventResourcesTable';
+import SelectableMembers from './components/SelectableMembers';
+import EventMembers from './components/EventMembers';
+import SelectableResources from './components/SelectableResources'; 
+import EventResources from './components/EventResources';
+import DateTime from 'react-datetime';
+import Validation from 'react-validation-mixin';
+import ValidationStrategy from 'joi-validation-strategy';
+import Joi from 'joi';
+import Radium from 'radium';
 
 let EventsEditView = React.createClass({
   mixins: [
@@ -24,8 +29,40 @@ let EventsEditView = React.createClass({
     DeepLinkedStateMixin
   ],
 
+  validatorTypes: {
+    title: Joi.string().required().label('Titulo'),
+    description: Joi.string().required().label('Descripcion'),
+    date: Joi.required().label('Fecha'),
+    sector: Joi.string().required().label('Sector'),
+    location: Joi.string().required().label('Lugar')
+  },
+
+  propTypes: {
+    errors: React.PropTypes.object,
+    validate: React.PropTypes.func,
+    isValid: React.PropTypes.func,
+    handleValidation: React.PropTypes.func,
+    getValidationMessages: React.PropTypes.func,
+    clearValidations: React.PropTypes.func,
+  },
+
+  getValidatorData() {
+    return {
+      title: this.state.event.title,
+      description: this.state.event.description,
+      date: this.state.event.date,
+      sector: this.state.event.sector,
+      location: this.state.event.location
+    };
+  },
+
   getInitialState() {
-    return {selectableMembers: [], selectableResources: [], event: {members: [], resources: []}};
+    return {
+      selectableMembers: [], 
+      selectableResources: [], 
+      event: {members: [], resources: []},
+      formButton: {disabled: false, style: 'primary'}
+    };
   },
 
   componentDidMount() {
@@ -42,28 +79,113 @@ let EventsEditView = React.createClass({
     this.setState({event: event});
   },
 
+  handleDateChange(newDate) {
+    let date = newDate.format('YYYY-MM-DD HH:mm');
+    let event = this.state.event;
+
+    event.date = date;
+
+    this.setState({event: event});
+  },
+
+  onSubmit(event) {
+    event.preventDefault();
+
+    const onValidate = (error) => {
+      if (error) {
+        let validationError = this.props.getValidationMessages()[0];
+        window.toastr.error(validationError, 'ERROR!');
+      } else {
+        this.setFormDisabled();
+
+        let data = this.getValidatorData();
+
+        EventsActions
+          .update
+          .triggerPromise(this.props.params.id, data)
+          .then((event) => {
+            window.toastr.success('Evento ha sido editado exitosamente');
+            this.setFormEnabled();
+          })
+          .catch((error) => {
+            window.toastr.error(error, 'ERROR!');
+            this.setFormEnabled();
+          })
+      }
+    }
+
+    this.props.validate(onValidate);
+  },
+
+  setFormDisabled() {
+    this.setState({
+      formButton: {
+        disbled: true,
+        style: null
+      }
+    })
+  },
+
+  setFormEnabled() {
+    this.setState({
+      formButton: {
+        disabled: false,
+        style: 'primary'
+      }
+    })
+  },
+
   render() {
     return (
       <div>
         <div className="eventInfo">
-          <Input type="text" valueLink={this.deepLinkState(['event', 'title'])} label="Titulo" />
-          <Input type="textarea" valueLink={this.deepLinkState(['event', 'description'])} label="Descripcion" />
-          <input type="date" className="form-control" valueLink={this.deepLinkState(['event', 'date'])} />
-          <Input type="sector" valueLink={this.deepLinkState(['event', 'sector'])} label="Sector" />
-          <label>Lugar</label>
-          <select className="form-control"valueLink={this.deepLinkState(['event', 'location'])} >
-            <option value='Local'>Local</option>
-            <option value='Cancha'>Cancha</option>
-          </select>
+          <h3><FontAwesome name="calendar-plus-o" /> Editar Evento Evento</h3>
+          <form onSubmit={this.onSubmit}>
+            <Input type="text" valueLink={this.deepLinkState(['event', 'title'])} label="Titulo" placeholder="Titulo" />
+            <Input type="textarea" valueLink={this.deepLinkState(['event', 'description'])} label="Descripcion" placeholder="Descripcion" />
+            <Input type="text" value={this.state.event.date} label="Fecha" />
+            <DateTime 
+              defaultValue={this.state.event.date}
+              input={false}
+              onChange={this.handleDateChange} />
+            <br/>
+            <Input type="text" valueLink={this.deepLinkState(['event', 'sector'])} label="Sector" placeholder="Sector" />
+            <Input type="select" valueLink={this.deepLinkState(['event', 'location'])} label="Lugar">
+              <option value="Local">Local</option>
+              <option value="Cancha">Cancha</option>
+            </Input>
+            <ButtonInput 
+              type="submit" 
+              bsStyle={this.state.formButton.style} 
+              disabled={this.state.formButton.disabled} 
+              value="Editar Evento"  />
+          </form>
         </div>
 
-        <SelectableMembersTable members={this.state.selectableMembers} eventId={this.props.params.id} />
-        <EventMembersTable members={this.state.event.members} eventId={this.props.params.id} />
-        <SelectableResourcesTable resources={this.state.selectableResources} eventId={this.props.params.id} />
-        <EventResourcesTable resources={this.state.event.resources} eventId={this.props.params.id} />
+        <Row>
+          <Col xs={6}>
+           <SelectableMembers members={this.state.selectableMembers} eventId={this.props.params.id} />
+          </Col>
+          <Col xs={6}>
+            <EventMembers members={this.state.event.members} eventId={this.props.params.id} />
+          </Col>          
+        </Row>
+
+        <Row>
+          <Col xs={6}>
+            <SelectableResources resources={this.state.selectableResources} eventId={this.props.params.id} />
+          </Col>
+          <Col xs={6}>
+            <EventResources resources={this.state.event.resources} eventId={this.props.params.id} />
+          </Col>          
+        </Row>
       </div>
     );
   }
 });
+
+EventsEditView = Radium(EventsEditView);
+
+EventsEditView = Validation(ValidationStrategy)(EventsEditView);
 
 export default EventsEditView;

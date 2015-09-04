@@ -1,27 +1,29 @@
-import React from 'react';
-import {ButtonToolbar, Button, Input} from 'react-bootstrap';
+import React from 'react/addons';
+import {ButtonToolbar, Button, Input, Row} from 'react-bootstrap';
 import FontAwesome from 'react-fontawesome';
 import EventsActions from '../../../../../actions/EventsActions';
+import Radium from 'radium';
 
 let EventResourcesTableRow = React.createClass({
-
+  mixins: [React.addons.LinkedStateMixin],
+  
   getInitialState() {
-    return {amount: 1}
+    return {amount: 1};
   },
 
   handleRemoveResource() {
     EventsActions
-      .removeResource(this.props.eventId, this.props.resource.resource_id)
+      .removeResource(this.props.eventId, this.props.resource.resource_id);
   },
 
   render() {
     return (
       <tr>
         <td>{this.props.resource.type} </td>
-        <td>{this.props.resource.amount}</td>
+        <td>Usando: {this.props.resource.amount}</td>
         <td>
           <ButtonToolbar>
-            <Button bsStyle="danger" onClick={this.handleRemoveResource} >
+            <Button bsSize="xsmall" bsStyle="danger" onClick={this.handleRemoveResource} >
               <FontAwesome name="times" />
             </Button>
           </ButtonToolbar>
@@ -31,4 +33,10 @@ let EventResourcesTableRow = React.createClass({
   }
 });
 
-export default EventResourcesTableRow;
+let styles = {
+  inputAdd: {
+    width: '50px'
+  }
+};
+
+export default Radium(EventResourcesTableRow);

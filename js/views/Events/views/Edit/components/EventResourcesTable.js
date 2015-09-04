@@ -1,20 +1,34 @@
 import React from 'react';
 import {Table} from 'react-bootstrap';
-import ResourcesActions from '../../../../../actions/ResourcesActions';
 import EventResourcesTableRow from './EventResourcesTableRow';
+import _ from 'lodash';
 
-let SelectableResourcesTable = React.createClass({
+let EventResourcesTable = React.createClass({
+
+  getFilteredResources(wordFilter) {
+    let resources;
+
+    if (_.isEmpty(wordFilter)) {
+      resources = this.props.resources;
+    } else {
+      let reg = new RegExp(wordFilter);
+
+      resources = _.filter((this.props.resources), (resource) => {
+        if (reg.test(resource.type)) {
+          return true
+        };
+      });
+    }
+
+    return resources;
+  },
+
   render() {
+    let resources = this.getFilteredResources(this.props.wordFilter)
     return (
       <Table>
-        <tr>
-          <th>Type</th>
-          <th>Usando</th>
-          <th>Remover</th>
-        </tr>
-
         <tbody>
-          {this.props.resources.map((resource) => {
+          {resources.map((resource) => {
             return <EventResourcesTableRow key={resource.id} resource={resource} eventId={this.props.eventId} />
           })}
         </tbody>
@@ -23,4 +37,4 @@ let SelectableResourcesTable = React.createClass({
   }
 });
 
-export default SelectableResourcesTable;
+export default EventResourcesTable;

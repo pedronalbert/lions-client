@@ -1,7 +1,8 @@
 import React from 'react/addons';
-import {ButtonToolbar, Button, Input} from 'react-bootstrap';
+import {ButtonToolbar, Button, Input, Row} from 'react-bootstrap';
 import FontAwesome from 'react-fontawesome';
 import EventsActions from '../../../../../actions/EventsActions';
+import Radium from 'radium';
 
 let SelectableResourcesTableRow = React.createClass({
   mixins: [React.addons.LinkedStateMixin],
@@ -12,18 +13,33 @@ let SelectableResourcesTableRow = React.createClass({
 
   handleAddResource() {
     EventsActions
-      .addResource(this.props.eventId, this.props.resource.id, this.state.amount);
+      .addResource
+      .triggerPromise(this.props.eventId, this.props.resource.id, this.state.amount)
+      .then((response) => {
+        window.toastr.success('Recurso agregado exitosamente!');
+      })
+      .catch((error) => {
+        window.toastr.error(error, 'ERROR!');
+      })
   },
 
   render() {
     return (
       <tr>
         <td>{this.props.resource.type} </td>
-        <td>{this.props.resource.available}</td>
+        <td>Disponible: {this.props.resource.available}</td>
         <td>
-          <Input type="number" valueLink={this.linkState('amount')} min="1" max={this.props.resource.available} />
+          <Input 
+            style={styles.inputAdd} 
+            bsSize="small"
+            type="number" 
+            valueLink={this.linkState('amount')} 
+            min={1} 
+            max={this.props.resource.available} />
+        </td>
+        <td>
           <ButtonToolbar>
-            <Button bsStyle="primary" onClick={this.handleAddResource} >
+            <Button bsSize="xsmall" bsStyle="primary" onClick={this.handleAddResource} >
               <FontAwesome name="plus" />
             </Button>
           </ButtonToolbar>
@@ -33,4 +49,10 @@ let SelectableResourcesTableRow = React.createClass({
   }
 });
 
-export default SelectableResourcesTableRow;
+let styles = {
+  inputAdd: {
+    width: '50px'
+  }
+};
+
+export default Radium(SelectableResourcesTableRow);

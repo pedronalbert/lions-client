@@ -2,6 +2,7 @@ import React from 'react';
 import {Table} from 'react-bootstrap';
 import SelectableMembersTableRow from './SelectableMembersTableRow';
 import EventsActions from '../../../../../actions/EventsActions';
+import _ from 'lodash';
 
 let SelectableMembersTable = React.createClass({
   handleAddMember(memberId) {
@@ -9,17 +10,31 @@ let SelectableMembersTable = React.createClass({
       .addMember(this.props.eventId, memberId);
   },
 
+  getFilteredMembers(wordFilter) {
+    let members;
+
+    if (_.isEmpty(wordFilter)) {
+      members = this.props.members;
+    } else {
+      let reg = new RegExp(wordFilter);
+
+      members = _.filter((this.props.members), (member) => {
+        if (reg.test(member.ci) || reg.test(member.first_name) || reg.test(member.last_name)) {
+          return true
+        };
+      });
+    }
+
+    return members;
+  },
+
   render() {
+    let members = this.getFilteredMembers(this.props.wordFilter);
+
     return (
       <Table>
-        <tr>
-          <th>Nombre</th>
-          <th>Cedula</th>
-          <th>Agregar</th>
-        </tr>
-
         <tbody>
-          {this.props.members.map((member) => {
+          {members.map((member) => {
             return <SelectableMembersTableRow key={member.id} member={member} onAddMember={this.handleAddMember.bind(this, member.id)} />
           })}
         </tbody>

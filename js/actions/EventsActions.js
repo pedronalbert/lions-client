@@ -8,6 +8,7 @@ let EventsActions = Reflux.createActions({
   'removeMember': {asyncReslut: true},
   'addResource': {asyncResult: true},
   'removeResource': {asyncResult: true},
+  'update': {asyncResult: true},
   'delete': {}
 });
 

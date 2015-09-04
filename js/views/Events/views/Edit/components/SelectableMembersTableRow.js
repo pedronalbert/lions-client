@@ -7,10 +7,10 @@ let SelectableMembersTableRow = React.createClass({
     return (
       <tr>
         <td>{this.props.member.first_name} {this.props.member.last_name} </td>
-        <td>{this.props.member.ci}</td>
+        <td>CI: {this.props.member.ci}</td>
         <td>
           <ButtonToolbar>
-            <Button bsStyle="primary" onClick={this.props.onAddMember}>
+            <Button bsStyle="primary" bsSize="xsmall" onClick={this.props.onAddMember}>
               <FontAwesome name="plus" />
             </Button>
           </ButtonToolbar>

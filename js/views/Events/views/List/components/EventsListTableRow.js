@@ -28,10 +28,10 @@ let EventsListTableRow = React.createClass({
         <td>{this.props.event.date}</td>
         <td>
           <ButtonToolbar>
-            <Button bsStyle="primary" onClick={this.handleEdit.bind(this, this.props.event.id)}>
+            <Button bsStyle="primary" bsSize="small" onClick={this.handleEdit.bind(this, this.props.event.id)}>
               <FontAwesome name="pencil" />
             </Button>
-            <Button bsStyle="danger" onClick={this.handleDelete.bind(this, this.props.event.id)}>
+            <Button bsStyle="danger" bsSize="small" onClick={this.handleDelete.bind(this, this.props.event.id)}>
               <FontAwesome name="trash-o" />
             </Button>
           </ButtonToolbar>

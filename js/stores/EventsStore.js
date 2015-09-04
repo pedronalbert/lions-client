@@ -240,6 +240,9 @@ let EventsStore = Reflux.createStore({
       }
     }).done((resource) => {
       this.addLocalResource(eventId, resource);
+      EventsActions.addResource.completed();
+    }).fail((xhr) => {
+      EventsActions.addResource.failed();
     })
   },
 

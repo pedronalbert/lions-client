@@ -1,25 +1,43 @@
 import React from 'react';
-import {Table} from 'react-bootstrap';
+import {Table, Well} from 'react-bootstrap';
 import EventsListTableRow from './EventsListTableRow';
+import Radium from 'radium';
 
 let EventsListTable = React.createClass({
   render() {
-    return  (
-      <Table bordered condensed>
-        <tr>
-          <th>Titulo</th>
-          <th>Fecha</th>
-          <th>Administrar</th>
-        </tr>
 
-        <tbody>
-          {this.props.events.map((event) => {
-            return <EventsListTableRow key={event.id} event={event} />
-          })}
-        </tbody>
-      </Table>
-    );
+    if(this.props.events.length > 0) {
+      return  (
+        <Table bordered responsive>
+          <thead>
+            <tr>
+              <th>Titulo</th>
+              <th>Fecha</th>
+              <th style={styles.adminCol}>Administrar</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {this.props.events.map((event) => {
+              return <EventsListTableRow key={event.id} event={event} />
+            })}
+          </tbody>
+        </Table>
+      );
+    } else {
+      return (
+        <Well>
+          No hay eventos registrados!
+        </Well>
+      );
+    }
   }
 });
 
-export default EventsListTable;
+let styles = {
+  adminCol: {
+    width: '90px'
+  }
+}
+
+export default Radium(EventsListTable);
