@@ -109,11 +109,12 @@ let MembersNewView = React.createClass({
         <Input type="text" valueLink={this.linkState('title')} label="Titulo" placeholder="Titulo" />
         <Input type="textarea" valueLink={this.linkState('description')} label="Descripcion" placeholder="Descripcion" />
         <Input type="text" value={this.state.date} label="Fecha" />
-        <DateTime 
-          input={false}
-          timeFormat="YYYY-MM-DD HH:mm" 
-          onChange={this.handleDateChange} />
-        <br/>
+        <div style={styles.datePicker}>
+          <DateTime 
+            input={false}
+            timeFormat="YYYY-MM-DD HH:mm" 
+            onChange={this.handleDateChange} />
+        </div>
         <Input type="text" valueLink={this.linkState('sector')} label="Sector" placeholder="Sector" />
         <Input type="select" valueLink={this.linkState('location')} label="Lugar">
           <option value="Local">Local</option>
@@ -138,6 +139,12 @@ let styles = {
 
   button: {
     width: '100%'
+  },
+
+  datePicker: {
+    width: '250px',
+    margin: 'auto',
+    marginBottom: '10px'
   }
 };
 
