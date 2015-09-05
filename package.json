@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/pedronalbert/lions-client#readme",
   "dependencies": {
+    "alertifyjs": "^1.4.1",
     "babelify": "^6.3.0",
     "browser-sync": "^2.8.2",
     "browserify": "^11.0.1",

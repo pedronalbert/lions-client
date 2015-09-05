@@ -19,6 +19,8 @@ import Validation from 'react-validation-mixin';
 import ValidationStrategy from 'joi-validation-strategy';
 import Joi from 'joi';
 import Radium from 'radium';
+import Alertify from 'alertifyjs';
+import {Navigation} from 'react-router';
 
 let EventsEditView = React.createClass({
   mixins: [
@@ -26,7 +28,8 @@ let EventsEditView = React.createClass({
     Reflux.connect(ResourcesStore, 'selectableResources'),
     Reflux.connect(MembersStore, 'selectableMembers'),
     Reflux.listenTo(EventsStore, 'onEventsStoreChange'),
-    DeepLinkedStateMixin
+    DeepLinkedStateMixin,
+    Navigation
   ],
 
   validatorTypes: {
@@ -135,6 +138,31 @@ let EventsEditView = React.createClass({
     })
   },
 
+  handleFinishEvent() {
+    const message = "¿Esta seguro de que desea finalizar el evento? No se podra editar el evento en el futuro y los recursos utilizados seran movidos al inventario";
+
+    Alertify.defaults.glossary.title = 'Precaucion';
+    Alertify.defaults.glossary.ok = 'SI';
+    Alertify.defaults.glossary.cancel = 'NO';
+
+    Alertify
+      .confirm(message)
+      .set('onok', (closeEvent) => {
+        console.log('calling eventsactions');
+
+        EventsActions
+          .finishEvent
+          .triggerPromise(this.state.event.id)
+          .then((response) => {
+            window.toastr.success('El evento ha sido marcado como finalizado!');
+            this.transitionTo('events');
+          })
+          .catch((error) => {
+            window.toastr.error(error, 'ERROR!');
+          })
+      })
+  },
+
   render() {
     return (
       <div>
@@ -160,6 +188,14 @@ let EventsEditView = React.createClass({
               disabled={this.state.formButton.disabled} 
               value="Editar Evento"  />
           </form>
+          <ButtonToolbar>
+            <Button
+              bsStyle="success"
+              onClick={this.handleFinishEvent} >
+              Finalizar Evento
+            </Button>
+
+          </ButtonToolbar>
         </div>
 
         <Row>

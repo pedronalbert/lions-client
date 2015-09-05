@@ -110,6 +110,16 @@ let EventsStore = Reflux.createStore({
       })
   },
 
+  finishLocalEvent(eventId) {
+    let eventIndex = _.findIndex(this.events, (event) => {
+      return event.id == eventId;
+    });
+
+    if(eventIndex >= 0) {
+      this.events[eventIndex].active = 0;
+    }
+  },
+
   onGetList() {
     if (_.isEmpty(this.events)) {
       $.ajax({
@@ -260,6 +270,24 @@ let EventsStore = Reflux.createStore({
       }
     }).done((resource) => {
       this.removeLocalResource(eventId, resourceId);
+    })
+  },
+
+  onFinishEvent(eventId) {
+    $.ajax({
+      url: this.url + '/' + eventId + '/finish_event',
+      method: 'POST',
+      data: {
+        event_id: eventId
+      },
+      xhrFields: {
+        withCredentials: true
+      }
+    }).done((resource) => {
+      this.finishLocalEvent(eventId);
+      EventsActions.finishEvent.completed(true);
+    }).fail((error) => {
+      EventsActions.finishEvent.failed(error);
     })
   }
 

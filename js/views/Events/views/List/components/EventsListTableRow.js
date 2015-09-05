@@ -42,7 +42,16 @@ let EventsListTableRow = React.createClass({
   render() {
     let eventDate = this.parseEventDate(this.props.event.date);
     let eventHour = this.parseEventHour(this.props.event.date);
+    let editButton;
 
+    if(this.props.event.active == 1) {
+      editButton = <Button bsStyle="primary" bsSize="small" onClick={this.handleEdit.bind(this, this.props.event.id)}>
+          <FontAwesome name="pencil" />
+        </Button>
+    } else {
+      editButton = '';
+    }
+    
     return (
       <tr>
         <td>{this.props.event.title}</td>
@@ -50,9 +59,7 @@ let EventsListTableRow = React.createClass({
         <td>{eventHour}</td>
         <td>
           <ButtonToolbar>
-            <Button bsStyle="primary" bsSize="small" onClick={this.handleEdit.bind(this, this.props.event.id)}>
-              <FontAwesome name="pencil" />
-            </Button>
+            {editButton}
             <Button bsStyle="danger" bsSize="small" onClick={this.handleDelete.bind(this, this.props.event.id)}>
               <FontAwesome name="trash-o" />
             </Button>
