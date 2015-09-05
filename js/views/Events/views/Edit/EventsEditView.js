@@ -164,7 +164,7 @@ let EventsEditView = React.createClass({
   render() {
     return (
       <div>
-        <h3><FontAwesome name="calendar-plus-o" /> Editar Evento</h3>
+        <h3 className="page-title"><FontAwesome name="calendar-plus-o" /> Editar Informacion del Evento</h3>
         
         <Tabs defaultActiveKey={1}>
           <Tab eventKey={1} title="Informacion Del Evento">

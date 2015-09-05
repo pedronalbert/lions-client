@@ -108,7 +108,7 @@ let MembersEditView = React.createClass({
 
   render() {
     return <div style={styles.base}>
-      <h3><FontAwesome name="user-plus" /> Editar Miembro</h3>
+      <h3 className="page-title"><FontAwesome name="user-plus" /> Editar Miembro</h3>
       <form onSubmit={this.onSubmit}>
         <Input type="text" valueLink={this.deepLinkState(['member', 'first_name'])} label="Nombre" placeholder="Nombre" />
         <Input type="text" valueLink={this.deepLinkState(['member', 'last_name'])} label="Apellido" placeholder="Apellido" />

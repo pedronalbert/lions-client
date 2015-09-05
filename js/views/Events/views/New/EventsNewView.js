@@ -104,7 +104,7 @@ let MembersNewView = React.createClass({
 
   render() {
     return <div style={styles.base}>
-      <h3><FontAwesome name="calendar-plus-o" /> Registrar Evento</h3>
+      <h3 className="page-title"><FontAwesome name="calendar-plus-o" /> Registrar Evento</h3>
       <form onSubmit={this.onSubmit}>
         <Input type="text" valueLink={this.linkState('title')} label="Titulo" placeholder="Titulo" />
         <Input type="textarea" valueLink={this.linkState('description')} label="Descripcion" placeholder="Descripcion" />

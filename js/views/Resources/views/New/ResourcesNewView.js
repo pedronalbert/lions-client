@@ -92,7 +92,7 @@ let ResourcesNewView = React.createClass({
 
   render() {
     return <div style={styles.base}>
-      <h3><FontAwesome name="cart-plus" /> Registrar Recurso</h3>
+      <h3 className="page-title"><FontAwesome name="cart-plus" /> Registrar Recurso</h3>
       <form onSubmit={this.onSubmit}>
         <Input valueLink={this.linkState('type')} type="text" label="Tipo" placeholder="Tipo"/>
         <Input valueLink={this.linkState('available')} type="text" label="Disponibles" placeholder="Disponibles"/>
