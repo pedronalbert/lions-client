@@ -3,6 +3,7 @@ import {Button, ButtonToolbar} from 'react-bootstrap';
 import FontAwesome from 'react-fontawesome';
 import {Navigation} from 'react-router';
 import MembersActions from '../../../../../actions/MembersActions';
+import Alertify from 'alertifyjs';
 
 let MembersTableRow = React.createClass({
   mixins: [Navigation],
@@ -14,16 +15,23 @@ let MembersTableRow = React.createClass({
   },
 
   handleDelete(id) {
-    let confirm = window.confirm('¿Está seguro de que desea eliminar este miembro?');
+    const message = '¿Está seguro de que desea eliminar este miembro?';
 
-    if(confirm) {
-      MembersActions
-        .delete
-        .triggerPromise(id)
-        .then((response) => {
-          window.toastr.success('Miembro ha sido eliminado');
-        });
-    }
+    Alertify.defaults.glossary.title = 'Precaucion';
+    Alertify.defaults.glossary.ok = 'SI';
+    Alertify.defaults.glossary.cancel = 'NO';
+
+    Alertify
+      .confirm(message)
+      .set('onok', (closeEvent) => {
+
+        MembersActions
+          .delete
+          .triggerPromise(id)
+          .then((response) => {
+            window.toastr.success('Miembro ha sido eliminado');
+          });
+      })
   },
 
   render() {
