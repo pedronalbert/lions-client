@@ -52,7 +52,7 @@ let SelectableResourcesTableRow = React.createClass({
 let styles = {
   inputAdd: {
     width: '50px'
-  }
+  },
 };
 
 export default Radium(SelectableResourcesTableRow);

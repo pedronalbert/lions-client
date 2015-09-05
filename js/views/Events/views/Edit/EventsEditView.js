@@ -6,7 +6,7 @@ import MembersActions from '../../../../actions/MembersActions';
 import MembersStore from '../../../../stores/MembersStore';
 import ResourcesStore from '../../../../stores/ResourcesStore';
 import ResourcesActions from '../../../../actions/ResourcesActions';
-import {Input, ButtonInput, ButtonToolbar, Button, Table, Row, Col} from 'react-bootstrap';
+import {Input, ButtonInput, ButtonToolbar, Button, Table, Row, Col, Tabs, Tab} from 'react-bootstrap';
 import FontAwesome from 'react-fontawesome';
 import _ from 'lodash';
 import DeepLinkedStateMixin from 'react-deep-link-state';
@@ -148,8 +148,6 @@ let EventsEditView = React.createClass({
     Alertify
       .confirm(message)
       .set('onok', (closeEvent) => {
-        console.log('calling eventsactions');
-
         EventsActions
           .finishEvent
           .triggerPromise(this.state.event.id)
@@ -166,59 +164,100 @@ let EventsEditView = React.createClass({
   render() {
     return (
       <div>
-        <div className="eventInfo">
-          <h3><FontAwesome name="calendar-plus-o" /> Editar Evento Evento</h3>
-          <form onSubmit={this.onSubmit}>
-            <Input type="text" valueLink={this.deepLinkState(['event', 'title'])} label="Titulo" placeholder="Titulo" />
-            <Input type="textarea" valueLink={this.deepLinkState(['event', 'description'])} label="Descripcion" placeholder="Descripcion" />
-            <Input type="text" value={this.state.event.date} label="Fecha" />
-            <DateTime 
-              defaultValue={this.state.event.date}
-              input={false}
-              onChange={this.handleDateChange} />
-            <br/>
-            <Input type="text" valueLink={this.deepLinkState(['event', 'sector'])} label="Sector" placeholder="Sector" />
-            <Input type="select" valueLink={this.deepLinkState(['event', 'location'])} label="Lugar">
-              <option value="Local">Local</option>
-              <option value="Cancha">Cancha</option>
-            </Input>
-            <ButtonInput 
-              type="submit" 
-              bsStyle={this.state.formButton.style} 
-              disabled={this.state.formButton.disabled} 
-              value="Editar Evento"  />
-          </form>
-          <ButtonToolbar>
-            <Button
-              bsStyle="success"
-              onClick={this.handleFinishEvent} >
-              Finalizar Evento
-            </Button>
+        <h3><FontAwesome name="calendar-plus-o" /> Editar Evento</h3>
+        
+        <Tabs defaultActiveKey={1}>
+          <Tab eventKey={1} title="Informacion Del Evento">
+            <div style={styles.eventInfoBox}>
+              <form onSubmit={this.onSubmit}>
+                <Input type="text" valueLink={this.deepLinkState(['event', 'title'])} label="Titulo" placeholder="Titulo" />
+                <Input type="textarea" valueLink={this.deepLinkState(['event', 'description'])} label="Descripcion" placeholder="Descripcion" />
+                <Input type="text" value={this.state.event.date} label="Fecha" />
+                <div style={styles.datePicker} >
+                  <DateTime 
+                    defaultValue={this.state.event.date}
+                    input={false}
+                    onChange={this.handleDateChange}
+                  />
+                </div>
+                <Input type="text" valueLink={this.deepLinkState(['event', 'sector'])} label="Sector" placeholder="Sector" />
+                <Input type="select" valueLink={this.deepLinkState(['event', 'location'])} label="Lugar">
+                  <option value="Local">Local</option>
+                  <option value="Cancha">Cancha</option>
+                </Input>
+                <ButtonInput 
+                  type="submit" 
+                  style={styles.fullButton}
+                  bsStyle={this.state.formButton.style} 
+                  disabled={this.state.formButton.disabled} 
+                  value="Editar Evento"  
+                />
+              </form>
+              <div style={styles.finishEventBox}>
+                <ButtonToolbar>
+                  <Button
+                    bsStyle="success"
+                    style={styles.fullButton}
+                    onClick={this.handleFinishEvent} 
+                  >
+                    Finalizar Evento
+                  </Button>
+                </ButtonToolbar>
+              </div>
+            </div>
+          </Tab>
 
-          </ButtonToolbar>
-        </div>
+          <Tab eventKey={2} title="Miembros">
+            <Row>
+              <Col xs={6}>
+               <SelectableMembers members={this.state.selectableMembers} eventId={this.props.params.id} />
+              </Col>
+              <Col xs={6}>
+                <EventMembers members={this.state.event.members} eventId={this.props.params.id} />
+              </Col>  
+            </Row>        
+          </Tab>
 
-        <Row>
-          <Col xs={6}>
-           <SelectableMembers members={this.state.selectableMembers} eventId={this.props.params.id} />
-          </Col>
-          <Col xs={6}>
-            <EventMembers members={this.state.event.members} eventId={this.props.params.id} />
-          </Col>          
-        </Row>
+          <Tab eventKey={3} title="Recursos">
+            <Row>
+              <Col xs={6}>
+                <SelectableResources resources={this.state.selectableResources} eventId={this.props.params.id} />
+              </Col>
+              <Col xs={6}>
+                <EventResources resources={this.state.event.resources} eventId={this.props.params.id} />
+              </Col>          
+            </Row>
+          </Tab>
 
-        <Row>
-          <Col xs={6}>
-            <SelectableResources resources={this.state.selectableResources} eventId={this.props.params.id} />
-          </Col>
-          <Col xs={6}>
-            <EventResources resources={this.state.event.resources} eventId={this.props.params.id} />
-          </Col>          
-        </Row>
+        </Tabs>
+
       </div>
+
     );
   }
 });
+
+let styles = {
+  eventInfoBox: {
+    width: '400px',
+    margin: '15px auto'
+  },
+
+  datePicker: {
+    width: '250px',
+    margin: 'auto',
+    marginBottom: '10px'
+  },
+
+  fullButton: {
+    width: '100%'
+  },
+
+  finishEventBox: {
+    width: '100%',
+    margin: 'auto'
+  }
+}
 
 EventsEditView = Radium(EventsEditView);
 

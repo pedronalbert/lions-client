@@ -8,10 +8,18 @@ let EventResources = React.createClass({
   mixins: [React.addons.LinkedStateMixin],
 
   render() {
+    const InputAddon = <FontAwesome name="search" />;
+
     return (
       <div>
         <h4><FontAwesome name="cubes" /> Recursos en el Evento</h4>
-        <Input type="text" bsSize="small" valueLink={this.linkState('wordFilter')} label="Buscar" />
+        <Input 
+          type="text"
+          bsSize="small" 
+          valueLink={this.linkState('wordFilter')} 
+          addonBefore={InputAddon} 
+          placeholder="Recurso"
+        />
 
         <div style={styles.membersBox}>
           <EventResourcesTable 
@@ -26,7 +34,7 @@ let EventResources = React.createClass({
 
 let styles = {
   membersBox: {
-    height: '100px',
+    height: '500px',
     overflowY: 'scroll'
   }
 }

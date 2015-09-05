@@ -8,10 +8,18 @@ let SelectableMembers = React.createClass({
   mixins: [React.addons.LinkedStateMixin],
 
   render() {
+    const InputAddon = <FontAwesome name="search" />;
+
     return (
       <div>
         <h4><FontAwesome name="users" /> Miembros</h4>
-        <Input type="text" bsSize="small" valueLink={this.linkState('wordFilter')} label="Buscar" />
+        <Input 
+          type="text"
+          bsSize="small" 
+          valueLink={this.linkState('wordFilter')} 
+          addonBefore={InputAddon} 
+          placeholder="Nombre o Cedula"
+        />
 
         <div style={styles.membersBox}>
           <SelectableMembersTable 
@@ -26,7 +34,7 @@ let SelectableMembers = React.createClass({
 
 let styles = {
   membersBox: {
-    height: '100px',
+    height: '500px',
     overflowY: 'scroll'
   }
 }
