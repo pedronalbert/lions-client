@@ -4,14 +4,10 @@ import $ from 'jquery';
 import _ from 'lodash';
 
 let MembersStore = Reflux.createStore({
-  url: 'http://server.lions.com/member',
+  url: '/member',
   members: [],
 
   listenables: [MembersActions],
-
-  init() {
-    this.onGetList();
-  },
 
   find(id) {
     let member = _.find(this.members, (member) => {
@@ -54,6 +50,9 @@ let MembersStore = Reflux.createStore({
       $.ajax({
         url: this.url,
         method: 'GET',
+        xhrFields: {
+            withCredentials : true
+        }
       }).done((members) => {
         this.members = members;
         this.trigger(this.members);
@@ -72,7 +71,7 @@ let MembersStore = Reflux.createStore({
       url: this.url,
       method: 'POST',
       data: data,
-      xhrFields : {
+      xhrFields: {
         withCredentials : true
      }
     }).done((member) => {
@@ -117,7 +116,7 @@ let MembersStore = Reflux.createStore({
       url: this.url + '/' + id,
       method: 'PUT',
       data: data,
-      xhrFields : {
+      xhrFields: {
         withCredentials : true
      }
     }).done((member) => {

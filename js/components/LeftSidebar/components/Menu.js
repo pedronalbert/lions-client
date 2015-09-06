@@ -18,6 +18,11 @@ let Menu = React.createClass({
       <div style={styles.title}><FontAwesome name="users" /> Miembros</div>
       <MenuItem href="members" text="Lista de Miembros" icon="list" />
       <MenuItem href="members/new" text="Registrar Miembro" icon="user-plus" />
+
+      <div style={styles.title}><FontAwesome name="users" /> Usuarios</div>
+      <MenuItem href="users" text="Lista de Usuarios" icon="list" />
+      <MenuItem href="users/new" text="Registrar Usuario" icon="user-plus" />
+
     </div>
   }
 });

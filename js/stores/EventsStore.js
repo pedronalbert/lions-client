@@ -5,14 +5,10 @@ import _ from 'lodash';
 import ResourcesActions from '../actions/ResourcesActions';
 
 let EventsStore = Reflux.createStore({
-  url: 'http://server.lions.com/event',
+  url: '/event',
   events: [],
 
   listenables: [EventsActions],
-
-  init() {
-    this.onGetList();
-  },
 
   find(id) {
     let event = _.find(this.events, (event) => {
@@ -125,6 +121,9 @@ let EventsStore = Reflux.createStore({
       $.ajax({
         url: this.url,
         method: 'GET',
+        xhrFields: {
+          withCredentials : true
+        }
       }).done((events) => {
         this.events = events;
         this.trigger(this.events);

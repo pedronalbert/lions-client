@@ -4,14 +4,10 @@ import $ from 'jquery';
 import _ from 'lodash';
 
 let ResourcesStore = Reflux.createStore({
-  url: 'http://server.lions.com/resource',
+  url: '/resource',
   resources: [],
 
   listenables: [ResourcesActions],
-
-  init() {
-    this.onGetList();
-  },
 
   find(id) {
     let resource = _.find(this.resources, (resource) => {
@@ -53,7 +49,10 @@ let ResourcesStore = Reflux.createStore({
     if (_.isEmpty(this.resources) || forceUpdate) {
       $.ajax({
         url: this.url,
-        method: 'GET'
+        method: 'GET',
+        xhrFields: {
+            withCredentials : true
+        }
       }).done((resources) => {
         this.resources = resources;
         this.trigger(this.resources);
