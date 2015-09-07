@@ -1,11 +1,14 @@
+/*---Dependencies---*/
+import FontAwesome from 'react-fontawesome';
+import Radium from 'radium';
 import React from 'react/addons';
 import Reflux from 'reflux';
+import {Input} from 'react-bootstrap';
+
+/*---Components---*/
 import MembersActions from '../../../../actions/MembersActions';
 import MembersStore from '../../../../stores/MembersStore';
 import MembersTable from './components/MembersTable';
-import {Input} from 'react-bootstrap';
-import FontAwesome from 'react-fontawesome';
-import Radium from 'radium';
 
 let MembersLisView = React.createClass({
   mixins: [
@@ -14,10 +17,10 @@ let MembersLisView = React.createClass({
   ],
   
   getInitialState() {
-    return {members: [], filter: ''};
+    return {filter: ''};
   },
 
-  componentDidMount() {
+  componentWillMount() {
     MembersActions.getList();
   },
 
@@ -54,4 +57,5 @@ let styles = {
     margin: 'auto'
   }
 }
+
 export default Radium(MembersLisView);

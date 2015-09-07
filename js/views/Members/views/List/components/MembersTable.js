@@ -1,26 +1,24 @@
-import React from 'react';
-import {Table, Well} from 'react-bootstrap';
-import MembersTableRow from './MembersTableRow';
-import UsersActions from '../../../../../actions/UsersActions';
+/*---Dependencies---*/
 import _ from 'lodash';
 import Radium from 'radium';
+import React from 'react';
+import Reflux from 'reflux';
+import {Table, Well} from 'react-bootstrap';
+
+/*---Components---*/
+import MembersTableRow from './MembersTableRow';
+import UsersActions from '../../../../../actions/UsersActions';
+import UsersStore from '../../../../../stores/UsersStore';
 
 let MembersTable = React.createClass({
+  mixins: [Reflux.connect(UsersStore, 'usersStore')],
+
   getInitialProps() {
-    return {members: [], filter: ''};
+    return { filter: ''};
   },
 
-  getInitialState() {
-    return {loggedUser: {}};
-  },
-
-  componentDidMount() {
-    UsersActions
-      .getLoggedUser
-      .triggerPromise()
-      .then((user) => {
-        this.setState({loggedUser: user});
-      });
+  componentWillMount() {
+    UsersActions.getLoggedUser();
   },
 
   getFilteredMembers(filter) {
@@ -45,7 +43,7 @@ let MembersTable = React.createClass({
     let members = this.getFilteredMembers(this.props.filter);
     let adminCol = null;
 
-    if(this.state.loggedUser.role == 1) {
+    if(this.state.usersStore.loggedUser.role == 1) {
       adminCol = <th style={styles.adminCol}>Editar</th>
     }
 

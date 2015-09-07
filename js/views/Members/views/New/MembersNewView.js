@@ -105,7 +105,7 @@ let MembersNewView = React.createClass({
           type="submit" 
           bsStyle={this.state.formButton.style} 
           disabled={this.state.formButton.disabled} 
-          value="Agregar Recurso" 
+          value="Registrar Miembro" 
           style={styles.button} />
       </form>
     </div>
