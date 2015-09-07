@@ -14,6 +14,7 @@ import ResourcesEditView from './views/Resources/views/Edit/ResourcesEditView';
 import ResourcesNewView from './views/Resources/views/New/ResourcesNewView';
 import EventsNewView from './views/Events/views/New/EventsNewView';
 import EventsEditView from './views/Events/views/Edit/EventsEditView';
+import EventsShowView from './views/Events/views/Show/EventsShowView';
 import EventsListView from './views/Events/views/List/EventsListView';
 import LoginView from './views/Login/LoginView';
 import UsersListView from './views/Users/views/List/UsersListView';
@@ -87,6 +88,7 @@ React.render((
       <Route path="users/:id/edit" component={UsersEditView} />
       <Route path="users/new" component={UsersNewView} />
       <Route path="logs" component={LogsListView} />
+      <Route path="events/:id" component={EventsShowView} />
     </Route>
   </Router>
 ), document.getElementById('app'));

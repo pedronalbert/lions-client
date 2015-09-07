@@ -29,6 +29,7 @@ let EventsListTableRow = React.createClass({
     let eventHour = this.parseEventHour(this.props.event.date);
     let editButton = null;
     let adminCol = null;
+    let showUrl = '#/events/' + this.props.event.id;
 
 
     if(this.props.event.active == 1) {
@@ -50,7 +51,7 @@ let EventsListTableRow = React.createClass({
     
     return (
       <tr>
-        <td>{this.props.event.title}</td>
+        <td><a href={showUrl}>{this.props.event.title}</a></td>
         <td>{eventDate}</td>
         <td>{eventHour}</td>
         {adminCol}
