@@ -4,6 +4,7 @@ import UsersActions from '../../../../../actions/UsersActions';
 import {Table, Well} from 'react-bootstrap';
 import ResourcesTableRow from './ResourcesTableRow';
 import Radium from 'radium';
+import _ from 'lodash';
 
 let ResourcesTable = React.createClass({
 
@@ -21,7 +22,27 @@ let ResourcesTable = React.createClass({
       });
   },
 
+  getFilteredResources(filter) {
+    let resources;
+
+    if (_.isEmpty(filter)) {
+      resources = this.props.resources;
+    } else {
+      let reg = new RegExp(filter);
+
+      resources = _.filter((this.props.resources), (resource) => {
+        if (reg.test(resource.type)) {
+          return true
+        };
+      });
+    }
+
+    return resources;
+  },
+
   render() {
+    let resources = this.getFilteredResources(this.props.filterWord);
+
     if (this.props.resources.length > 0) {
       let adminCol = null;
 
@@ -42,7 +63,7 @@ let ResourcesTable = React.createClass({
           </thead>
 
           <tbody>
-            {this.props.resources.map((resource) => {
+            {resources.map((resource) => {
               return <ResourcesTableRow key={resource.id} resource={resource} />
             })}
           </tbody>
