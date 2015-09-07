@@ -37,3 +37,20 @@ body {
   margin-bottom: 25px;
   text-align: center;
 }
+
+.btn-print {
+  margin-left: 20px;
+}
+
+@media print {
+  .leftSidebar {
+    display: none;
+  }
+  .container .content {
+    margin-left: 0px;
+  }
+
+  .btn-print {
+    display: none;
+  }
+}

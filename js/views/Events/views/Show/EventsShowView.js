@@ -3,6 +3,7 @@ import React from 'react';
 import Reflux from 'reflux';
 import FontAwesome from 'react-fontawesome';
 import _ from 'lodash';
+import {Button, ButtonToolbar} from 'react-bootstrap';
 
 /*--Components--*/
 import EventsStore from '../../../../stores/EventsStore';
@@ -27,8 +28,10 @@ let EventsShowView = React.createClass({
   render() {
     return (
       <div>
-        <h3 className="page-title"><FontAwesome name="calendar-plus-o" /> Informacion del Evento</h3>
-
+        <h3 className="page-title">
+          <FontAwesome name="calendar-plus-o" /> Informacion del Evento 
+          <button onClick={this.handlePrint} className="btn btn-primary btn-print"><FontAwesome name="print" /></button>
+        </h3>
         <EventInfoTable event={this.state.event} />
         <hr />
         <h3 style={styles.title}> <FontAwesome name="users" />Miembros</h3>
@@ -46,6 +49,10 @@ let EventsShowView = React.createClass({
     });
 
     this.setState({event: event});
+  },
+
+  handlePrint() {
+    window.print();
   }
 });
 
