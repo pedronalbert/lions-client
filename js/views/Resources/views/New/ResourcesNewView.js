@@ -59,7 +59,7 @@ let ResourcesNewView = React.createClass({
           .create
           .triggerPromise(data)
           .then((response) => {
-            window.toastr.success('Recurso ha sido registrado exitosamente');
+            window.toastr.success('Recurso registrado exitosamente');
             this.transitionTo('resources');
           })
           .catch((response) => {

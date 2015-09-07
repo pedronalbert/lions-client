@@ -71,7 +71,7 @@ let MembersEditView = React.createClass({
           .update
           .triggerPromise(this.props.params.id, data)
           .then((response) => {
-            window.toastr.success('Usuario editado exitosamente');
+            window.toastr.success('Usuario actualizado exitosamente');
             this.transitionTo('users');
           })
           .catch((error) => {

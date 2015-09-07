@@ -190,13 +190,13 @@ let EventsEditView = React.createClass({
                   style={styles.fullButton}
                   bsStyle={this.state.formButton.style} 
                   disabled={this.state.formButton.disabled} 
-                  value="Editar Evento"  
+                  value="Actualizar Informacion"  
                 />
               </form>
               <div style={styles.finishEventBox}>
                 <ButtonToolbar>
                   <Button
-                    bsStyle="success"
+                    bsStyle="danger"
                     style={styles.fullButton}
                     onClick={this.handleFinishEvent} 
                   >

@@ -10,7 +10,7 @@ let SelectableMembersTable = React.createClass({
       .addMember
       .triggerPromise(this.props.eventId, memberId)
       .then((member) => {
-        window.toastr.success('Miembro ha sido agregado exitosamente');
+        window.toastr.success('Miembro agregado exitosamente');
       })
       .catch((error) => {
         window.toastr.error(error);

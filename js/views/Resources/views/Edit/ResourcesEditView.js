@@ -73,7 +73,7 @@ let ResourcesEditView = React.createClass({
           .update
           .triggerPromise(this.props.params.id, data)
           .then((response) => {
-            window.toastr.success('Recurso editado exitosamente');
+            window.toastr.success('Recurso actualizado exitosamente');
             this.transitionTo('resources');
           })
           .catch((response) => {

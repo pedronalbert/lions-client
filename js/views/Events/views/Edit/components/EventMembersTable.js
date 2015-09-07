@@ -7,7 +7,14 @@ import _ from 'lodash';
 let EventMembersTable = React.createClass({
   handleRemoveMember(memberId) {
     EventsActions
-      .removeMember(this.props.eventId, memberId);
+      .removeMember
+      .triggerPromise(this.props.eventId, memberId)
+      .then((response) => {
+        window.toastr.success('Miembro removido exitosamente');
+      })
+      .catch((error) => {
+        window.toastr.error(error, 'ERROR!');
+      });
   },
 
   getFilteredMembers(wordFilter) {

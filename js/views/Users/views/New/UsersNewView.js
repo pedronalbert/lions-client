@@ -58,7 +58,7 @@ let MembersNewView = React.createClass({
           .create
           .triggerPromise(data)
           .then((response) => {
-            window.toastr.success('Usuario ha sido registrado exitosamente');
+            window.toastr.success('Usuario registrado exitosamente');
             this.transitionTo('users');
           })
           .catch((error) => {

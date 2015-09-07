@@ -13,7 +13,14 @@ let EventResourcesTableRow = React.createClass({
 
   handleRemoveResource() {
     EventsActions
-      .removeResource(this.props.eventId, this.props.resource.resource_id);
+      .removeResource
+      .triggerPromise(this.props.eventId, this.props.resource.resource_id)
+      .then((response) => {
+        window.toastr.success('Recurso removido exitosamente');
+      })
+      .catch((error) => {
+        window.toastr.error(error, 'ERROR!');
+      });
   },
 
   render() {

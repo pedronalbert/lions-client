@@ -65,7 +65,7 @@ let MembersNewView = React.createClass({
           .create
           .triggerPromise(data)
           .then((event) => {
-            window.toastr.success('Evento ha sido registrado exitosamente');
+            window.toastr.success('Evento registrado exitosamente');
             this.transitionTo('events/' + event.id + '/edit');
           })
           .catch((error) => {
