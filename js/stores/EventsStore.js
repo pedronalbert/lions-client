@@ -117,7 +117,7 @@ let EventsStore = Reflux.createStore({
     }
   },
 
-  onGetList(force) {
+  onGetList(force = false) {
     if (_.isEmpty(this.events) || force) {
       $.ajax({
         url: this.url,

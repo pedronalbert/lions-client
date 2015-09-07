@@ -2,6 +2,7 @@ import Reflux from 'reflux';
 import MembersActions from '../actions/MembersActions';
 import $ from 'jquery';
 import _ from 'lodash';
+import UsersActions from '../actions/UsersActions';
 
 let MembersStore = Reflux.createStore({
   url: '/member',
@@ -45,20 +46,24 @@ let MembersStore = Reflux.createStore({
     this.trigger(this.members);
   },
 
-  onGetList(forceUpdate = false) {
-    if (_.isEmpty(this.members) || forceUpdate) {
+  onGetList(force = false) {
+    if (_.isEmpty(this.members) || force) {
       $.ajax({
         url: this.url,
-        method: 'GET',
-        xhrFields: {
-            withCredentials : true
-        }
+        method: 'GET'
       }).done((members) => {
         this.members = members;
         this.trigger(this.members);
         MembersActions.getList.completed(members);
-      }).fail((xhr) => {
-        MembersActions.getList.failed('Error en el servidor');
+      }).fail((error) => {
+        if(error.status == 401) {
+          UsersActions.logout();
+          MembersActions.getList.failed('Su session ha finalizado');
+        } else if(error.status == 400) {
+          MembersActions.getList.failed(error.responseJSON.message);
+        } else {
+          MembersActions.getList.failed('Error en el servidor');
+        }
       })
     } else {
       this.trigger(this.members);
@@ -77,9 +82,12 @@ let MembersStore = Reflux.createStore({
     }).done((member) => {
       this.add(member);
       MembersActions.create.completed(member);
-    }).fail((xhr) => {
-      if (xhr.status == 400) {
-        MembersActions.create.failed(xhr.responseJSON.error);   
+    }).fail((error) => {
+      if(error.status == 401) {
+        UsersActions.logout();
+        MembersActions.create.failed('Su session ha finalizado');
+      } else if(error.status == 400) {
+        MembersActions.create.failed(error.responseJSON.message);
       } else {
         MembersActions.create.failed('Error en el servidor');
       }
@@ -115,27 +123,37 @@ let MembersStore = Reflux.createStore({
     $.ajax({
       url: this.url + '/' + id,
       method: 'PUT',
-      data: data,
-      xhrFields: {
-        withCredentials : true
-     }
+      data: data
     }).done((member) => {
       this.update(id, member);
       MembersActions.update.completed(member);
-    }).fail((response) => {
-      MembersActions.update.failed(response.message);
-    });
+    }).fail((error) => {
+      if(error.status == 401) {
+        UsersActions.logout();
+        MembersActions.update.failed('Su session ha finalizado');
+      } else if(error.status == 400) {
+        MembersActions.update.failed(error.responseJSON.message);
+      } else {
+        MembersActions.update.failed('Error en el servidor');
+      }
+    })
   },
 
   onDelete(id) {
     $.ajax({
       url: this.url + '/' + id,
-      method: 'DELETE',
-      xhrFields: {
-        withCredentials: true
-      }
+      method: 'DELETE'
     }).done((response) => {
       this.remove(id);
+    }).fail((error) => {
+      if(error.status == 401) {
+        UsersActions.logout();
+        MembersActions.delete.failed('Su session ha finalizado');
+      } else if(error.status == 400) {
+        MembersActions.delete.failed(error.responseJSON.message);
+      } else {
+        MembersActions.delete.failed('Error en el servidor');
+      }
     })
   }
 });

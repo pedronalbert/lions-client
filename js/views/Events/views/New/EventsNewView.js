@@ -143,8 +143,7 @@ let styles = {
 
   datePicker: {
     width: '250px',
-    margin: 'auto',
-    marginBottom: '10px'
+    margin: '0px auto 10px auto'
   }
 };
 

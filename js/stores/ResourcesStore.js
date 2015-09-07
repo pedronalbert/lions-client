@@ -2,6 +2,7 @@ import Reflux from 'reflux';
 import ResourcesActions from '../actions/ResourcesActions';
 import $ from 'jquery';
 import _ from 'lodash';
+import UsersActions from '../actions/UsersActions';
 
 let ResourcesStore = Reflux.createStore({
   url: '/resource',
@@ -57,8 +58,15 @@ let ResourcesStore = Reflux.createStore({
         this.resources = resources;
         this.trigger(this.resources);
         ResourcesActions.getList.completed(resources);
-      }).fail((xhr, status) => {
-        ResourcesActions.getList.failed('Error en el servidor!');
+      }).fail((error) => {
+        if(error.status == 401) {
+          UsersActions.logout();
+          ResourcesActions.getList.failed('Su session ha finalizado');
+        } else if(error.status == 400) {
+          ResourcesActions.getList.failed(error.responseJSON.message);
+        } else {
+          ResourcesActions.getList.failed('Error en el servidor');
+        }
       })
     } else {
       this.trigger(this.resources);
@@ -77,9 +85,12 @@ let ResourcesStore = Reflux.createStore({
     }).done((resource) => {
       this.add(resource);
       ResourcesActions.create.completed(resource);
-    }).fail((xhr) => {
-      if (xhr.status == 400) {
-        ResourcesActions.create.failed(xhr.responseJSON.error);   
+    }).fail((error) => {
+      if(error.status == 401) {
+        UsersActions.logout();
+        ResourcesActions.create.failed('Su session ha finalizado');
+      } else if(error.status == 400) {
+        ResourcesActions.create.failed(error.responseJSON.message);
       } else {
         ResourcesActions.create.failed('Error en el servidor');
       }
@@ -122,9 +133,16 @@ let ResourcesStore = Reflux.createStore({
     }).done((resource) => {
       this.update(id, resource);
       ResourcesActions.update.completed(resource);
-    }).fail((response) => {
-      ResourcesActions.update.failed(response.message);
-    });
+    }).fail((error) => {
+      if(error.status == 401) {
+        UsersActions.logout();
+        ResourcesActions.update.failed('Su session ha finalizado');
+      } else if(error.status == 400) {
+        ResourcesActions.update.failed(error.responseJSON.message);
+      } else {
+        ResourcesActions.update.failed('Error en el servidor');
+      }
+    })
   },
 
   onDelete(id) {
@@ -137,6 +155,15 @@ let ResourcesStore = Reflux.createStore({
     }).done((response) => {
       this.remove(id);
       ResourcesActions.delete.completed();
+    }).fail((error) => {
+      if(error.status == 401) {
+        UsersActions.logout();
+        ResourcesActions.delete.failed('Su session ha finalizado');
+      } else if(error.status == 400) {
+        ResourcesActions.delete.failed(error.responseJSON.message);
+      } else {
+        ResourcesActions.delete.failed('Error en el servidor');
+      }
     })
   }
 });

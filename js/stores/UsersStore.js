@@ -1,6 +1,7 @@
 import Reflux from 'reflux';
 import UsersActions from '../actions/UsersActions';
 import $ from 'jquery';
+import _ from 'lodash';
 
 let UsersStore = Reflux.createStore({
   loggedUser: {},
@@ -10,19 +11,28 @@ let UsersStore = Reflux.createStore({
   listenables: [UsersActions],
 
   onGetLoggedUser() {
-    $.ajax({
-      url: this.url + '/logged',
-      method: 'POST',
-      xhrFields: {
-        withCredentials : true
-      }
-    }).done((user) => {
-      this.loggedUser = user;
-      this.trigger({loggedUser: user});
-      UsersActions.getLoggedUser.completed(user);
-    }).fail((xhr, code) => {
-      UsersActions.getLoggedUser.failed()
-    })
+    if(_.isEmpty(this.loggedUser)) {
+      $.ajax({
+        url: this.url + '/logged',
+        method: 'POST'
+      }).done((user) => {
+        this.loggedUser = user;
+        this.trigger({loggedUser: user});
+        UsersActions.getLoggedUser.completed(user);
+      }).fail((error) => {
+        if(error.status == 401) {
+          UsersActions.logout();
+          UsersActions.getLoggedUser.failed('Su session ha finalizado');
+        } else if(error.status == 400) {
+          UsersActions.getLoggedUser.failed(error.responseJSON.message);
+        } else {
+          UsersActions.getLoggedUser.failed('Error en el servidor');
+        }
+      })   
+    } else {
+      this.trigger({loggedUser: this.loggedUser, users: this.users});
+      UsersActions.getLoggedUser.completed(this.loggedUser);
+    }
   },
 
   onIsLogged() {
@@ -44,42 +54,47 @@ let UsersStore = Reflux.createStore({
       data: {
         email: email,
         password: password
-      },
-      xhrFields: {
-        withCredentials : true
       }
     }).done((user) => {
       this.loggedUser = user;
-      this.trigger({loggedUser: user});
+      this.trigger({loggedUser: user, users: this.users});
       UsersActions.login.completed(user);
-    }).fail((xhr, code) => {
-      UsersActions.login.failed(xhr.responseJSON.message);
-    })
+    }).fail((error) => {
+      if(error.status == 401) {
+        UsersActions.logout();
+        UsersActions.login.failed('Su session ha finalizado');
+      } else if(error.status == 400) {
+        UsersActions.login.failed(error.responseJSON.message);
+      } else {
+        UsersActions.login.failed('Error en el servidor');
+      }
+    }) 
   },
 
   onLogout() {
     $.ajax({
       url: this.url + '/logout',
-      method: 'POST',
-      xhrFields: {
-        withCredentials : true
-      }
+      method: 'POST'
     }).done((response) => {
       this.loggedUser = {};
       this.trigger({loggedUser: {}});
       UsersActions.logout.completed();
-    }).fail((xhr, code) => {
-      UsersActions.logout.failed()
+    }).fail((error) => {
+      if(error.status == 401) {
+        UsersActions.logout();
+        UsersActions.login.failed('Su session ha finalizado');
+      } else if(error.status == 400) {
+        UsersActions.login.failed(error.responseJSON.message);
+      } else {
+        UsersActions.login.failed('Error en el servidor');
+      }
     })
   },
 
   onGetList() {
     $.ajax({
       url: this.url,
-      method: 'GET',
-      xhrFields: {
-        withCredentials : true
-      }
+      method: 'GET'
     }).done((users) => {
       this.users = users;
       this.trigger({
@@ -87,22 +102,33 @@ let UsersStore = Reflux.createStore({
         loggedUser: this.loggedUser
       });
       UsersActions.getList.completed(users);
-    }).fail((xhr, code) => {
-      UsersActions.getList.failed()
+    }).fail((error) => {
+      if(error.status == 401) {
+        UsersActions.logout();
+        UsersActions.getList.failed('Su session ha finalizado');
+      } else if(error.status == 400) {
+        UsersActions.getList.failed(error.responseJSON.message);
+      } else {
+        UsersActions.getList.failed('Error en el servidor');
+      }
     })
   },
 
   onFind(userId) {
     $.ajax({
       url: this.url + '/' + userId,
-      method: 'GET',
-      xhrFields: {
-        withCredentials : true
-      }
+      method: 'GET'
     }).done((user) => {
       UsersActions.find.completed(user);
-    }).fail((xhr, code) => {
-      UsersActions.find.failed()
+    }).fail((error) => {
+      if(error.status == 401) {
+        UsersActions.logout();
+        UsersActions.find.failed('Su session ha finalizado');
+      } else if(error.status == 400) {
+        UsersActions.find.failed(error.responseJSON.message);
+      } else {
+        UsersActions.find.failed('Error en el servidor');
+      }
     })
   }, 
 
@@ -110,15 +136,19 @@ let UsersStore = Reflux.createStore({
     $.ajax({
       url: this.url + '/' + userId,
       method: 'PUT',
-      xhrFields: {
-        withCredentials : true
-      },
       data: data,
     }).done((user) => {
       UsersActions.getList();
       UsersActions.update.completed(user);
-    }).fail((xhr, code) => {
-      UsersActions.update.failed()
+    }).fail((error) => {
+      if(error.status == 401) {
+        UsersActions.logout();
+        UsersActions.update.failed('Su session ha finalizado');
+      } else if(error.status == 400) {
+        UsersActions.update.failed(error.responseJSON.message);
+      } else {
+        UsersActions.update.failed('Error en el servidor');
+      }
     })
   },
 
@@ -132,8 +162,15 @@ let UsersStore = Reflux.createStore({
     }).done((user) => {
       UsersActions.getList();
       UsersActions.delete.completed(user);
-    }).fail((xhr, code) => {
-      UsersActions.delete.failed()
+    }).fail((error) => {
+      if(error.status == 401) {
+        UsersActions.logout();
+        UsersActions.delete.failed('Su session ha finalizado');
+      } else if(error.status == 400) {
+        UsersActions.delete.failed(error.responseJSON.message);
+      } else {
+        UsersActions.delete.failed('Error en el servidor');
+      }
     })
   },
 
@@ -148,8 +185,15 @@ let UsersStore = Reflux.createStore({
     }).done((user) => {
       UsersActions.getList();
       UsersActions.create.completed();
-    }).fail((xhr, code) => {
-      UsersActions.create.failed()
+    }).fail((error) => {
+      if(error.status == 401) {
+        UsersActions.logout();
+        UsersActions.create.failed('Su session ha finalizado');
+      } else if(error.status == 400) {
+        UsersActions.create.failed(error.responseJSON.message);
+      } else {
+        UsersActions.create.failed('Error en el servidor');
+      }
     })
   }
 });
