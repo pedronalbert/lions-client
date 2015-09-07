@@ -7,9 +7,14 @@ import UsersActions from '../actions/UsersActions';
 let ResourcesStore = Reflux.createStore({
   url: '/resource',
   resources: [],
+  fetchedFromServer: false,
 
   listenables: [ResourcesActions],
 
+  getInitialState() {
+    return this.resources;
+  },
+  
   find(id) {
     let resource = _.find(this.resources, (resource) => {
       return resource.id == id;
@@ -46,13 +51,14 @@ let ResourcesStore = Reflux.createStore({
     this.trigger(this.resources);
   },
 
-  onGetList(forceUpdate = false) {
-    if (_.isEmpty(this.resources) || forceUpdate) {
+  onGetList() {
+    if (!this.fetchedFromServer) {
       $.ajax({
         url: this.url,
         method: 'GET'
       }).done((resources) => {
         this.resources = resources;
+        this.fetchedFromServer = true;
         this.trigger(this.resources);
         ResourcesActions.getList.completed(resources);
       }).fail((error) => {

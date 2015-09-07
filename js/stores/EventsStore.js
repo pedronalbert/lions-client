@@ -8,8 +8,13 @@ import UsersActions from '../actions/UsersActions';
 let EventsStore = Reflux.createStore({
   url: '/event',
   events: [],
+  fetchedFromServer: false,
 
   listenables: [EventsActions],
+
+  getInitialState() {
+    return this.events;
+  },
 
   find(id) {
     let event = _.find(this.events, (event) => {
@@ -117,13 +122,14 @@ let EventsStore = Reflux.createStore({
     }
   },
 
-  onGetList(force = false) {
-    if (_.isEmpty(this.events) || force) {
+  onGetList() {
+    if (!this.fetchedFromServer) {
       $.ajax({
         url: this.url,
         method: 'GET'
       }).done((events) => {
         this.events = events;
+        this.fetchedFromServer = true;
         this.trigger(this.events);
         EventsActions.getList.completed(events);
       }).fail((error) => {

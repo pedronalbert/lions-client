@@ -7,8 +7,13 @@ import UsersActions from '../actions/UsersActions';
 let MembersStore = Reflux.createStore({
   url: '/member',
   members: [],
+  fetchedFromServer: false,
 
   listenables: [MembersActions],
+
+  getInitialState() {
+    return this.members;
+  },
 
   find(id) {
     let member = _.find(this.members, (member) => {
@@ -46,13 +51,14 @@ let MembersStore = Reflux.createStore({
     this.trigger(this.members);
   },
 
-  onGetList(force = false) {
-    if (_.isEmpty(this.members) || force) {
+  onGetList() {
+    if (!this.fetchedFromServer) {
       $.ajax({
         url: this.url,
         method: 'GET'
       }).done((members) => {
         this.members = members;
+        this.fetchedFromServer = true;
         this.trigger(this.members);
         MembersActions.getList.completed(members);
       }).fail((error) => {

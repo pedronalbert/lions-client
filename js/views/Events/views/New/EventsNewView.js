@@ -1,27 +1,22 @@
-import React from 'react/addons';
-import {Input, ButtonInput, Row, Col} from 'react-bootstrap';
-import Radium from 'radium';
-import EventsActions from '../../../../actions/EventsActions';
+/*---Dependencies---*/
+import DateTime from 'react-datetime';
 import FontAwesome from 'react-fontawesome';
+import Joi from 'joi';
+import Radium from 'radium';
+import React from 'react/addons';
 import Validation from 'react-validation-mixin';
 import ValidationStrategy from 'joi-validation-strategy';
-import Joi from 'joi';
+import {Input, ButtonInput, Row, Col} from 'react-bootstrap';
 import {Navigation} from 'react-router';
-import DateTime from 'react-datetime';
+
+/*---Components---*/
+import EventsActions from '../../../../actions/EventsActions';
 
 let MembersNewView = React.createClass({
   mixins: [
     React.addons.LinkedStateMixin,
     Navigation
   ],
-
-  validatorTypes: {
-    title: Joi.string().required().label('Titulo'),
-    description: Joi.string().required().label('Descripcion'),
-    date: Joi.required().label('Fecha'),
-    sector: Joi.string().required().label('Sector'),
-    location: Joi.string().required().label('Lugar')
-  },
 
   propTypes: {
     errors: React.PropTypes.object,
@@ -39,16 +34,34 @@ let MembersNewView = React.createClass({
     };
   },
 
-  getValidatorData() {
-    return {
-      title: this.state.title,
-      description: this.state.description,
-      date: this.state.date,
-      sector: this.state.sector,
-      location: this.state.location
-    };
+  render() {
+    return <div style={styles.base}>
+      <h3 className="page-title"><FontAwesome name="calendar-plus-o" /> Registrar Evento</h3>
+      <form onSubmit={this.onSubmit}>
+        <Input type="text" valueLink={this.linkState('title')} label="Titulo" placeholder="Titulo" />
+        <Input type="textarea" valueLink={this.linkState('description')} label="Descripcion" placeholder="Descripcion" />
+        <Input type="text" value={this.state.date} label="Fecha" />
+        <div style={styles.datePicker}>
+          <DateTime 
+            input={false}
+            timeFormat="YYYY-MM-DD hh:mm a" 
+            onChange={this.handleDateChange} />
+        </div>
+        <Input type="text" valueLink={this.linkState('sector')} label="Sector" placeholder="Sector" />
+        <Input type="select" valueLink={this.linkState('location')} label="Lugar">
+          <option value="Local">Local</option>
+          <option value="Cancha">Cancha</option>
+        </Input>
+        <ButtonInput 
+          type="submit" 
+          bsStyle={this.state.formButton.style} 
+          disabled={this.state.formButton.disabled} 
+          value="Agregar Evento" 
+          style={styles.button} />
+      </form>
+    </div>
   },
-
+  
   onSubmit(event) {
     event.preventDefault();
 
@@ -83,6 +96,25 @@ let MembersNewView = React.createClass({
 
     this.setState({date: date});
   },
+  
+  validatorTypes: {
+    title: Joi.string().required().label('Titulo'),
+    description: Joi.string().required().label('Descripcion'),
+    date: Joi.required().label('Fecha'),
+    sector: Joi.string().required().label('Sector'),
+    location: Joi.string().required().label('Lugar')
+  },
+
+  getValidatorData() {
+    return {
+      title: this.state.title,
+      description: this.state.description,
+      date: this.state.date,
+      sector: this.state.sector,
+      location: this.state.location
+    };
+  },
+
 
   setFormDisabled() {
     this.setState({
@@ -102,33 +134,6 @@ let MembersNewView = React.createClass({
     })
   },
 
-  render() {
-    return <div style={styles.base}>
-      <h3 className="page-title"><FontAwesome name="calendar-plus-o" /> Registrar Evento</h3>
-      <form onSubmit={this.onSubmit}>
-        <Input type="text" valueLink={this.linkState('title')} label="Titulo" placeholder="Titulo" />
-        <Input type="textarea" valueLink={this.linkState('description')} label="Descripcion" placeholder="Descripcion" />
-        <Input type="text" value={this.state.date} label="Fecha" />
-        <div style={styles.datePicker}>
-          <DateTime 
-            input={false}
-            timeFormat="YYYY-MM-DD HH:mm" 
-            onChange={this.handleDateChange} />
-        </div>
-        <Input type="text" valueLink={this.linkState('sector')} label="Sector" placeholder="Sector" />
-        <Input type="select" valueLink={this.linkState('location')} label="Lugar">
-          <option value="Local">Local</option>
-          <option value="Cancha">Cancha</option>
-        </Input>
-        <ButtonInput 
-          type="submit" 
-          bsStyle={this.state.formButton.style} 
-          disabled={this.state.formButton.disabled} 
-          value="Agregar Evento" 
-          style={styles.button} />
-      </form>
-    </div>
-  }
 })
 
 let styles = {

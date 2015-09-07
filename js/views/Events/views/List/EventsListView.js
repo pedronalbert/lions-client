@@ -1,41 +1,25 @@
-import React from 'react/addons';
-import Reflux from 'reflux';
-import EventsActions from '../../../../actions/EventsActions';
-import EventsStore from '../../../../stores/EventsStore';
-import EventsListTable from './components/EventsListTable';
-import {Input, Tabs, Tab} from 'react-bootstrap';
+/*---Dependencies---*/
+import _ from 'lodash';
 import FontAwesome from 'react-fontawesome';
 import Radium from 'radium';
-import _ from 'lodash';
+import React from 'react/addons';
+import Reflux from 'reflux';
+import {Input, Tabs, Tab} from 'react-bootstrap';
+
+/*---Components---*/
+import EventsActions from '../../../../actions/EventsActions';
+import EventsListTable from './components/EventsListTable';
+import EventsStore from '../../../../stores/EventsStore';
+
 
 let MembersLisView = React.createClass({
   mixins: [
     Reflux.connect(EventsStore, 'events'),
     React.addons.LinkedStateMixin
   ],
-  
-  getInitialState() {
-    return {events: []};
-  },
 
-  componentDidMount() {
+  componentWillMount() {
     EventsActions.getList();
-  },
-
-  getActiveEvents() {
-    let events = _.filter(this.state.events, (event) => {
-      return event.active == 1;
-    });
-
-    return events;
-  },
-
-  getFinishedEvents() {
-    let events = _.filter(this.state.events, (event) => {
-      return event.active == 0;
-    });
-
-    return events;
   },
 
   render() {
@@ -60,6 +44,22 @@ let MembersLisView = React.createClass({
         </Tabs>
       </div>
     );
+  },
+
+  getActiveEvents() {
+    let events = _.filter(this.state.events, (event) => {
+      return event.active == 1;
+    });
+
+    return events;
+  },
+
+  getFinishedEvents() {
+    let events = _.filter(this.state.events, (event) => {
+      return event.active == 0;
+    });
+
+    return events;
   }
 });
 

@@ -1,42 +1,27 @@
-import React from 'react/addons';
-import {Table, Well, Input} from 'react-bootstrap';
+/*---Dependencies---*/
+import _ from 'lodash';
 import EventsListTableRow from './EventsListTableRow';
 import Radium from 'radium';
-import _ from 'lodash';
+import React from 'react/addons';
+import Reflux from 'reflux';
+import {Table, Well, Input} from 'react-bootstrap';
+
+/*---Components---*/
 import UsersActions from '../../../../../actions/UsersActions';
+import UsersStore from '../../../../../stores/UsersStore';
 
 let EventsListTable = React.createClass({
-  mixins: [React.addons.LinkedStateMixin],
+  mixins: [
+    React.addons.LinkedStateMixin,
+    Reflux.connect(UsersStore, 'usersStore')
+  ],
 
   getInitialState() {
-    return {wordFilter: '', loggedUser: {}};
+    return {wordFilter: ''};
   },
 
-  componentDidMount() {
-    UsersActions
-      .getLoggedUser
-      .triggerPromise()
-      .then((user) => {
-        this.setState({loggedUser: user});
-      });
-  },
-
-  getFilteredEvents(wordFilter) {
-    let events;
-
-    if (_.isEmpty(wordFilter)) {
-      events = this.props.events;
-    } else {
-      let reg = new RegExp(wordFilter);
-
-      events = _.filter((this.props.events), (event) => {
-        if (reg.test(event.title)) {
-          return true
-        };
-      });
-    }
-
-    return events;
+  componentWillMount() {
+    UsersActions.getLoggedUser();
   },
 
   render() {
@@ -44,7 +29,7 @@ let EventsListTable = React.createClass({
       let filteredEvents = this.getFilteredEvents(this.state.wordFilter);
       let adminCol = null;
 
-      if(this.state.loggedUser.role == 1) {
+      if(this.state.usersStore.loggedUser.role == 1) {
         adminCol = <th style={styles.adminCol}>Administrar</th>
       }
 
@@ -81,6 +66,24 @@ let EventsListTable = React.createClass({
         </Well>
       );
     }
+  },
+
+  getFilteredEvents(wordFilter) {
+    let events;
+
+    if (_.isEmpty(wordFilter)) {
+      events = this.props.events;
+    } else {
+      let reg = new RegExp(wordFilter);
+
+      events = _.filter((this.props.events), (event) => {
+        if (reg.test(event.title)) {
+          return true
+        };
+      });
+    }
+
+    return events;
   }
 });
 

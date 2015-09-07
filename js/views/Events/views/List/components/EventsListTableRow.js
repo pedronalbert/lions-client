@@ -1,31 +1,61 @@
-import React from 'react';
-import {ButtonToolbar, Button} from 'react-bootstrap';
+/*---Dependencies---*/
+import Alertify from 'alertifyjs';
 import FontAwesome from 'react-fontawesome'
-import EventsActions from '../../../../../actions/EventsActions';
-import UsersActions from '../../../../../actions/UsersActions';
-import {Navigation} from 'react-router';
 import Moment from 'moment';
 import MomentLocale from 'moment/locale/es';
-import Alertify from 'alertifyjs';
+import React from 'react';
+import Reflux from 'reflux';
+import {ButtonToolbar, Button} from 'react-bootstrap';
+import {Navigation} from 'react-router';
+
+/*---Components---*/
+import EventsActions from '../../../../../actions/EventsActions';
+import UsersActions from '../../../../../actions/UsersActions';
+import UsersStore from '../../../../../stores/UsersStore';
 
 let EventsListTableRow = React.createClass({
-  mixins: [Navigation],
-
-  getInitialState() {
-    return {loggedUser: {}};
-  },
+  mixins: [
+    Navigation,
+    Reflux.connect(UsersStore, 'usersStore')
+  ],
 
   componenWillMount() {
     Moment.locale('es');
+    UsersActions.getLoggedUser();
   },
 
-  componentDidMount() {
-    UsersActions
-      .getLoggedUser
-      .triggerPromise()
-      .then((user) => {
-        this.setState({loggedUser: user});
-      });
+  render() {
+    let eventDate = this.parseEventDate(this.props.event.date);
+    let eventHour = this.parseEventHour(this.props.event.date);
+    let editButton = null;
+    let adminCol = null;
+
+
+    if(this.props.event.active == 1) {
+      editButton = <Button bsStyle="primary" bsSize="small" onClick={this.handleEdit.bind(this, this.props.event.id)}>
+          <FontAwesome name="pencil" />
+        </Button>
+    }
+
+    if(this.state.usersStore.loggedUser.role == 1) {
+      adminCol = <td>
+        <ButtonToolbar>
+          {editButton}
+          <Button bsStyle="danger" bsSize="small" onClick={this.handleDelete.bind(this, this.props.event.id)}>
+            <FontAwesome name="trash-o" />
+          </Button>
+        </ButtonToolbar>
+      </td>  
+    }
+    
+    return (
+      <tr>
+        <td>{this.props.event.title}</td>
+        <td>{eventDate}</td>
+        <td>{eventHour}</td>
+        {adminCol}
+      </tr>
+    );
   },
 
   handleDelete(id) {
@@ -65,40 +95,6 @@ let EventsListTableRow = React.createClass({
     let parsedHour = Moment(date).format('hh:mm a');
 
     return parsedHour;
-  },
-
-  render() {
-    let eventDate = this.parseEventDate(this.props.event.date);
-    let eventHour = this.parseEventHour(this.props.event.date);
-    let editButton = null;
-    let adminCol = null;
-
-
-    if(this.props.event.active == 1) {
-      editButton = <Button bsStyle="primary" bsSize="small" onClick={this.handleEdit.bind(this, this.props.event.id)}>
-          <FontAwesome name="pencil" />
-        </Button>
-    }
-
-    if(this.state.loggedUser.role == 1) {
-      adminCol = <td>
-        <ButtonToolbar>
-          {editButton}
-          <Button bsStyle="danger" bsSize="small" onClick={this.handleDelete.bind(this, this.props.event.id)}>
-            <FontAwesome name="trash-o" />
-          </Button>
-        </ButtonToolbar>
-      </td>  
-    }
-    
-    return (
-      <tr>
-        <td>{this.props.event.title}</td>
-        <td>{eventDate}</td>
-        <td>{eventHour}</td>
-        {adminCol}
-      </tr>
-    );
   }
 });
 

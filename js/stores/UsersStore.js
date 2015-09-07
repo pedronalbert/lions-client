@@ -7,6 +7,7 @@ let UsersStore = Reflux.createStore({
   loggedUser: {},
   users: {},
   url: '/user',
+  fetchedFromServer: false,
 
   listenables: [UsersActions],
 
@@ -18,12 +19,13 @@ let UsersStore = Reflux.createStore({
   },
 
   onGetLoggedUser() {
-    if(_.isEmpty(this.loggedUser)) {
+    if(!this.fetchedFromServer) {
       $.ajax({
         url: this.url + '/logged',
         method: 'POST'
       }).done((user) => {
         this.loggedUser = user;
+        this.fetchedFromServer = true;
         this.trigger({loggedUser: user});
         UsersActions.getLoggedUser.completed(user);
       }).fail((error) => {
