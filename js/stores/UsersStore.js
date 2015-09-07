@@ -10,6 +10,13 @@ let UsersStore = Reflux.createStore({
 
   listenables: [UsersActions],
 
+  getInitialState() {
+    return {
+      loggedUser: this.loggedUser,
+      users: this.users
+    };
+  },
+
   onGetLoggedUser() {
     if(_.isEmpty(this.loggedUser)) {
       $.ajax({

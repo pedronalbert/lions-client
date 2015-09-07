@@ -1,27 +1,20 @@
-import React from 'react';
-import Radium from 'radium';
-import Menu from './components/Menu';
+/*---Dependencies---*/
 import FontAwesome from 'react-fontawesome';
+import Radium from 'radium';
+import React from 'react';
+import Reflux from 'reflux';
 import {ButtonToolbar, Button} from 'react-bootstrap';
+
+/*---Components---*/
+import Menu from './components/Menu';
 import UsersActions from '../../actions/UsersActions';
+import UsersStore from '../../stores/UsersStore';
 
 let LeftSidebar = React.createClass({
-  getInitialState() {
-    return {loggedUser: {}};
-  },
+  mixins: [Reflux.connect(UsersStore, 'usersStore')],
 
-  componentDidMount() {
-    UsersActions
-      .getLoggedUser
-      .triggerPromise()
-      .then((user) => {
-        this.setState({loggedUser: user});
-      })
-  },
-
-  handleLogout() {
-    UsersActions
-      .logout()
+  componentWillMount() {
+    UsersActions.getLoggedUser()
   },
 
   render() {
@@ -30,15 +23,21 @@ let LeftSidebar = React.createClass({
         <img style={styles.logo} src="./img/logo.png" />
       </div>
       <div style={styles.label} >
-        <div style={styles.welcome}>Bienvenido {this.state.loggedUser.name}</div>
+        <div style={styles.welcome}>Bienvenido {this.state.usersStore.loggedUser.name}</div>
         <div style={styles.logout}>
           <Button bsStyle="danger" onClick={this.handleLogout} >
             <FontAwesome name="power-off" />
           </Button>
         </div>
       </div>
-      <Menu />
+
+      <Menu/>
     </div>);
+  },
+
+  handleLogout() {
+    UsersActions
+      .logout()
   }
 });
 

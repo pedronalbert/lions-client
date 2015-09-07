@@ -1,26 +1,24 @@
-import React from 'react';
-import Radium from 'radium';
+/*---Dependencies---*/
 import FontAwesome from 'react-fontawesome';
-import MenuItem from './MenuItem'; 
+import Radium from 'radium';
+import React from 'react';
+import Reflux from 'reflux';
 import {State, Link} from 'react-router';
+
+/*---Components---*/
+import MenuItem from './MenuItem'; 
 import UsersActions from '../../../actions/UsersActions';
+import UsersStore from '../../../stores/UsersStore';
 
 let Menu = React.createClass({
-  getInitialState() {
-    return {loggedUser: {}};
-  },
+  mixins: [Reflux.connect(UsersStore, 'usersStore')],
 
-  componentDidMount() {
-    UsersActions
-      .getLoggedUser
-      .triggerPromise()
-      .then((user) => {
-        this.setState({loggedUser: user});
-      })
+  componentWillMount() {
+    UsersActions.getLoggedUser()
   },
 
   render() {
-    if(this.state.loggedUser.role == 1) {
+    if(this.state.usersStore.loggedUser.role == 1) {
       return <div style={styles.base}>
         <div style={styles.title}><FontAwesome name="calendar" /> Eventos</div>
         <MenuItem href="events" text="Lista de eventos" icon="list" />
@@ -58,7 +56,12 @@ let Menu = React.createClass({
 let styles = {
   base: {
     padding: '15px 0px',
-    color: '#E4E4E4'
+    color: '#E4E4E4',
+    overflow: 'auto',
+    position: 'absolute',
+    bottom: '0px',
+    top: '260px',
+    width: '250px'
   },
 
   title: {
@@ -66,8 +69,6 @@ let styles = {
     fontWeight: 900,
     padding: '5px 25px'
   }
-}
+};
 
-Menu = Radium(Menu);
-
-export default Menu;
+export default Radium(Menu);

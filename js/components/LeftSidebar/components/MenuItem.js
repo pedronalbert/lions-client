@@ -1,6 +1,7 @@
-import React from 'react';
-import Radium from 'radium';
+/*---Dependencies---*/
 import FontAwesome from 'react-fontawesome';
+import Radium from 'radium';
+import React from 'react';
 import {Link} from 'react-router';
 
 let MenuItem = React.createClass({
@@ -27,7 +28,7 @@ let styles = {
     fontSize: '17px',
 
     ':hover': {
-      background: '#909090'
+      background: '#0065BB'
     }
   }, 
 
