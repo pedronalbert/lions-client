@@ -7,7 +7,14 @@ import _ from 'lodash';
 let SelectableMembersTable = React.createClass({
   handleAddMember(memberId) {
     EventsActions
-      .addMember(this.props.eventId, memberId);
+      .addMember
+      .triggerPromise(this.props.eventId, memberId)
+      .then((member) => {
+        window.toastr.success('Miembro ha sido agregado exitosamente');
+      })
+      .catch((error) => {
+        window.toastr.error(error);
+      })
   },
 
   getFilteredMembers(wordFilter) {

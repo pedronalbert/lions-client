@@ -3,6 +3,7 @@ import EventsActions from '../actions/EventsActions';
 import $ from 'jquery';
 import _ from 'lodash';
 import ResourcesActions from '../actions/ResourcesActions';
+import UsersActions from '../actions/UsersActions';
 
 let EventsStore = Reflux.createStore({
   url: '/event',
@@ -18,7 +19,7 @@ let EventsStore = Reflux.createStore({
     return event;
   },
 
-  remove(id) {
+  removeLocalEvent(id) {
      _.remove(this.events, (event) => {
       return event.id == id
     });
@@ -26,13 +27,13 @@ let EventsStore = Reflux.createStore({
     this.trigger(this.events);
   },
 
-  add(event) {
+  addLocalEvent(event) {
     this.events.push(event);
 
     this.trigger(this.events);
   },
 
-  update(id, newData) {
+  updateLocalEvent(id, newData) {
     let index =_.findIndex(this.events, (event) => {
       return event.id == id;
     });
@@ -116,20 +117,24 @@ let EventsStore = Reflux.createStore({
     }
   },
 
-  onGetList() {
-    if (_.isEmpty(this.events)) {
+  onGetList(force) {
+    if (_.isEmpty(this.events) || force) {
       $.ajax({
         url: this.url,
-        method: 'GET',
-        xhrFields: {
-          withCredentials : true
-        }
+        method: 'GET'
       }).done((events) => {
         this.events = events;
         this.trigger(this.events);
         EventsActions.getList.completed(events);
-      }).fail((err) => {
-        EventsActions.getList.failed(err);
+      }).fail((error) => {
+        if(error.status == 401) {
+          UsersActions.logout();
+          EventsActions.getList.failed('Su session ha finalizado');
+        } else if(error.status == 400) {
+          EventsActions.getList.failed(error.responseJSON.message);
+        } else {
+          EventsActions.getList.failed('Error en el servidor');
+        }
       })
     } else {
       this.trigger(this.events);
@@ -141,15 +146,19 @@ let EventsStore = Reflux.createStore({
     $.ajax({
       url: this.url,
       method: 'POST',
-      data: data,
-      xhrFields : {
-        withCredentials : true
-     }
+      data: data
     }).done((event) => {
-      this.add(event);
+      this.addLocalEvent(event);
       EventsActions.create.completed(event);
-    }).fail((response) => {
-      EventsActions.create.failed(response.message);
+    }).fail((error) => {
+      if(error.status == 401) {
+        UsersActions.logout();
+        EventsActions.create.failed('Su session ha finalizado');
+      } else if(error.status == 400) {
+        EventsActions.create.failed(error.responseJSON.message);
+      } else {
+        EventsActions.create.failed('Error en el servidor');
+      }
     })
   },
 
@@ -169,7 +178,7 @@ let EventsStore = Reflux.createStore({
             EventsActions.find.completed(event);
           }
         })
-        .catch((err) => {
+        .catch((error) => {
           EventsActions.find.failed(err);
         })
     } else {
@@ -182,29 +191,38 @@ let EventsStore = Reflux.createStore({
     $.ajax({
       url: this.url + '/' + id,
       method: 'PUT',
-      data: data,
-      xhrFields : {
-        withCredentials : true
-     }
+      data: data
     }).done((event) => {
-      this.update(id, event);
+      this.updateLocalEvent(id, event);
       EventsActions.update.completed(event);
-    }).fail((response) => {
-      console.log('EventsStore.onUpdate failed');
-      EventsActions.update.failed(response.message);
+    }).fail((error) => {
+      if(error.status == 401) {
+        UsersActions.logout();
+        EventsActions.update.failed('Su session ha finalizado');
+      } else if(error.status == 400) {
+        EventsActions.update.failed(error.responseJSON.message);
+      } else {
+        EventsActions.update.failed('Error en el servidor');
+      }
     });
   },
 
   onDelete(id) {
     $.ajax({
       url: this.url + '/' + id,
-      method: 'DELETE',
-      xhrFields: {
-        withCredentials: true
-      }
+      method: 'DELETE'
     }).done((response) => {
-      this.remove(id);
-    })
+      this.removeLocalEvent(id);
+    }).fail((error) => {
+      if(error.status == 401) {
+        UsersActions.logout();
+        EventsActions.update.failed('Su session ha finalizado');
+      } else if(error.status == 400) {
+        EventsActions.update.failed(error.responseJSON.message);
+      } else {
+        EventsActions.update.failed('Error en el servidor');
+      }
+    });
   },
 
   onAddMember(eventId, memberId) {
@@ -213,13 +231,20 @@ let EventsStore = Reflux.createStore({
       method: 'POST',
       data: {
         member_id: memberId
-      },
-      xhrFields: {
-        withCredentials: true
       }
     }).done((member) => {
       this.addLocalMember(eventId, member);
-    })
+      EventsActions.addMember.completed();
+    }).fail((error) => {
+      if(error.status == 401) {
+        UsersActions.logout();
+        EventsActions.addMember.failed('Su session ha finalizado');
+      } else if(error.status == 400) {
+        EventsActions.addMember.failed(error.responseJSON.message);
+      } else {
+        EventsActions.addMember.failed('Error en el servidor');
+      }
+    });
   },
 
   onRemoveMember(eventId, memberId) {
@@ -234,7 +259,17 @@ let EventsStore = Reflux.createStore({
       }
     }).done((response) => {
       this.removeLocalMember(eventId, memberId);
-    })
+      EventsActions.removeMember.completed();
+    }).fail((error) => {
+      if(error.status == 401) {
+        UsersActions.logout();
+        EventsActions.removeMember.failed('Su session ha finalizado');
+      } else if(error.status == 400) {
+        EventsActions.removeMember.failed(error.responseJSON.message);
+      } else {
+        EventsActions.removeMember.failed('Error en el servidor');
+      }
+    });
   },
 
   onAddResource(eventId, resourceId, amount) {
@@ -245,16 +280,20 @@ let EventsStore = Reflux.createStore({
         resource_id: resourceId,
         event_id: eventId,
         amount: amount
-      },
-      xhrFields: {
-        withCredentials: true
       }
     }).done((resource) => {
       this.addLocalResource(eventId, resource);
       EventsActions.addResource.completed();
-    }).fail((xhr) => {
-      EventsActions.addResource.failed();
-    })
+    }).fail((error) => {
+      if(error.status == 401) {
+        UsersActions.logout();
+        EventsActions.addResource.failed('Su session ha finalizado');
+      } else if(error.status == 400) {
+        EventsActions.addResource.failed(error.responseJSON.message);
+      } else {
+        EventsActions.addResource.failed('Error en el servidor');
+      }
+    });
   },
 
   onRemoveResource(eventId, resourceId) {
@@ -263,13 +302,19 @@ let EventsStore = Reflux.createStore({
       method: 'POST',
       data: {
         resource_id: resourceId
-      },
-      xhrFields: {
-        withCredentials: true
       }
     }).done((resource) => {
       this.removeLocalResource(eventId, resourceId);
-    })
+    }).fail((error) => {
+      if(error.status == 401) {
+        UsersActions.logout();
+        EventsActions.removeResource.failed('Su session ha finalizado');
+      } else if(error.status == 400) {
+        EventsActions.removeResource.failed(error.responseJSON.message);
+      } else {
+        EventsActions.removeResource.failed('Error en el servidor');
+      }
+    });
   },
 
   onFinishEvent(eventId) {
@@ -278,16 +323,20 @@ let EventsStore = Reflux.createStore({
       method: 'POST',
       data: {
         event_id: eventId
-      },
-      xhrFields: {
-        withCredentials: true
       }
     }).done((resource) => {
       this.finishLocalEvent(eventId);
       EventsActions.finishEvent.completed(true);
     }).fail((error) => {
-      EventsActions.finishEvent.failed(error);
-    })
+      if(error.status == 401) {
+        UsersActions.logout();
+        EventsActions.finishEvent.failed('Su session ha finalizado');
+      } else if(error.status == 400) {
+        EventsActions.finishEvent.failed(error.responseJSON.message);
+      } else {
+        EventsActions.finishEvent.failed('Error en el servidor');
+      }
+    });
   }
 
 });
