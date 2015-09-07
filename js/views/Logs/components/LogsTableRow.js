@@ -10,8 +10,6 @@ let LogsTableRow = React.createClass({
   getLogDate() {
     let date = Moment(this.props.log.created_at);
 
-    console.log(date);
-
     return date.fromNow();
   },
 

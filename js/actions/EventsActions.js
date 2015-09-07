@@ -5,7 +5,7 @@ let EventsActions = Reflux.createActions({
   'getList': {asyncResult: true},
   'find': {asyncResult: true},
   'addMember': {asyncResult: true},
-  'removeMember': {asyncReslut: true},
+  'removeMember': {asyncResult: true},
   'addResource': {asyncResult: true},
   'removeResource': {asyncResult: true},
   'update': {asyncResult: true},

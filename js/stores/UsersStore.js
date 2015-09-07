@@ -20,10 +20,7 @@ let UsersStore = Reflux.createStore({
         this.trigger({loggedUser: user});
         UsersActions.getLoggedUser.completed(user);
       }).fail((error) => {
-        if(error.status == 401) {
-          UsersActions.logout();
-          UsersActions.getLoggedUser.failed('Su session ha finalizado');
-        } else if(error.status == 400) {
+        if(error.status == 400 || error.status == 401) {
           UsersActions.getLoggedUser.failed(error.responseJSON.message);
         } else {
           UsersActions.getLoggedUser.failed('Error en el servidor');
@@ -60,10 +57,7 @@ let UsersStore = Reflux.createStore({
       this.trigger({loggedUser: user, users: this.users});
       UsersActions.login.completed(user);
     }).fail((error) => {
-      if(error.status == 401) {
-        UsersActions.logout();
-        UsersActions.login.failed('Su session ha finalizado');
-      } else if(error.status == 400) {
+      if(error.status == 400 || error.status == 401) {
         UsersActions.login.failed(error.responseJSON.message);
       } else {
         UsersActions.login.failed('Error en el servidor');
@@ -80,10 +74,7 @@ let UsersStore = Reflux.createStore({
       this.trigger({loggedUser: {}});
       UsersActions.logout.completed();
     }).fail((error) => {
-      if(error.status == 401) {
-        UsersActions.logout();
-        UsersActions.login.failed('Su session ha finalizado');
-      } else if(error.status == 400) {
+      if(error.status == 400 || error.status == 401) {
         UsersActions.login.failed(error.responseJSON.message);
       } else {
         UsersActions.login.failed('Error en el servidor');
@@ -103,10 +94,7 @@ let UsersStore = Reflux.createStore({
       });
       UsersActions.getList.completed(users);
     }).fail((error) => {
-      if(error.status == 401) {
-        UsersActions.logout();
-        UsersActions.getList.failed('Su session ha finalizado');
-      } else if(error.status == 400) {
+      if(error.status == 400 || error.status == 401) {
         UsersActions.getList.failed(error.responseJSON.message);
       } else {
         UsersActions.getList.failed('Error en el servidor');
@@ -121,10 +109,7 @@ let UsersStore = Reflux.createStore({
     }).done((user) => {
       UsersActions.find.completed(user);
     }).fail((error) => {
-      if(error.status == 401) {
-        UsersActions.logout();
-        UsersActions.find.failed('Su session ha finalizado');
-      } else if(error.status == 400) {
+      if(error.status == 400 || error.status == 401) {
         UsersActions.find.failed(error.responseJSON.message);
       } else {
         UsersActions.find.failed('Error en el servidor');
@@ -141,10 +126,7 @@ let UsersStore = Reflux.createStore({
       UsersActions.getList();
       UsersActions.update.completed(user);
     }).fail((error) => {
-      if(error.status == 401) {
-        UsersActions.logout();
-        UsersActions.update.failed('Su session ha finalizado');
-      } else if(error.status == 400) {
+      if(error.status == 400 || error.status == 401) {
         UsersActions.update.failed(error.responseJSON.message);
       } else {
         UsersActions.update.failed('Error en el servidor');
@@ -155,18 +137,12 @@ let UsersStore = Reflux.createStore({
   onDelete(userId) {
     $.ajax({
       url: this.url + '/' + userId,
-      method: 'DELETE',
-      xhrFields: {
-        withCredentials : true
-      }
+      method: 'DELETE'
     }).done((user) => {
       UsersActions.getList();
       UsersActions.delete.completed(user);
     }).fail((error) => {
-      if(error.status == 401) {
-        UsersActions.logout();
-        UsersActions.delete.failed('Su session ha finalizado');
-      } else if(error.status == 400) {
+      if(error.status == 400 || error.status == 401) {
         UsersActions.delete.failed(error.responseJSON.message);
       } else {
         UsersActions.delete.failed('Error en el servidor');
@@ -178,18 +154,12 @@ let UsersStore = Reflux.createStore({
     $.ajax({
       url: this.url,
       method: 'POST',
-      xhrFields: {
-        withCredentials : true
-      },
       data: data,
     }).done((user) => {
       UsersActions.getList();
       UsersActions.create.completed();
     }).fail((error) => {
-      if(error.status == 401) {
-        UsersActions.logout();
-        UsersActions.create.failed('Su session ha finalizado');
-      } else if(error.status == 400) {
+      if(error.status == 400 || error.status == 401) {
         UsersActions.create.failed(error.responseJSON.message);
       } else {
         UsersActions.create.failed('Error en el servidor');

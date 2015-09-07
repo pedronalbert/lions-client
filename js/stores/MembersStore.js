@@ -56,10 +56,7 @@ let MembersStore = Reflux.createStore({
         this.trigger(this.members);
         MembersActions.getList.completed(members);
       }).fail((error) => {
-        if(error.status == 401) {
-          UsersActions.logout();
-          MembersActions.getList.failed('Su session ha finalizado');
-        } else if(error.status == 400) {
+        if(error.status == 400 || error.status == 401) {
           MembersActions.getList.failed(error.responseJSON.message);
         } else {
           MembersActions.getList.failed('Error en el servidor');
@@ -83,10 +80,7 @@ let MembersStore = Reflux.createStore({
       this.add(member);
       MembersActions.create.completed(member);
     }).fail((error) => {
-      if(error.status == 401) {
-        UsersActions.logout();
-        MembersActions.create.failed('Su session ha finalizado');
-      } else if(error.status == 400) {
+      if(error.status == 400 || error.status == 401) {
         MembersActions.create.failed(error.responseJSON.message);
       } else {
         MembersActions.create.failed('Error en el servidor');
@@ -128,10 +122,7 @@ let MembersStore = Reflux.createStore({
       this.update(id, member);
       MembersActions.update.completed(member);
     }).fail((error) => {
-      if(error.status == 401) {
-        UsersActions.logout();
-        MembersActions.update.failed('Su session ha finalizado');
-      } else if(error.status == 400) {
+      if(error.status == 400 || error.status == 401) {
         MembersActions.update.failed(error.responseJSON.message);
       } else {
         MembersActions.update.failed('Error en el servidor');
@@ -146,10 +137,7 @@ let MembersStore = Reflux.createStore({
     }).done((response) => {
       this.remove(id);
     }).fail((error) => {
-      if(error.status == 401) {
-        UsersActions.logout();
-        MembersActions.delete.failed('Su session ha finalizado');
-      } else if(error.status == 400) {
+      if(error.status == 400 || error.status == 401) {
         MembersActions.delete.failed(error.responseJSON.message);
       } else {
         MembersActions.delete.failed('Error en el servidor');

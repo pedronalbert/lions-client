@@ -127,10 +127,7 @@ let EventsStore = Reflux.createStore({
         this.trigger(this.events);
         EventsActions.getList.completed(events);
       }).fail((error) => {
-        if(error.status == 401) {
-          UsersActions.logout();
-          EventsActions.getList.failed('Su session ha finalizado');
-        } else if(error.status == 400) {
+        if(error.status == 400 || erros.status == 401) {
           EventsActions.getList.failed(error.responseJSON.message);
         } else {
           EventsActions.getList.failed('Error en el servidor');
@@ -151,10 +148,7 @@ let EventsStore = Reflux.createStore({
       this.addLocalEvent(event);
       EventsActions.create.completed(event);
     }).fail((error) => {
-      if(error.status == 401) {
-        UsersActions.logout();
-        EventsActions.create.failed('Su session ha finalizado');
-      } else if(error.status == 400) {
+      if(error.status == 400 || erros.status == 401) {
         EventsActions.create.failed(error.responseJSON.message);
       } else {
         EventsActions.create.failed('Error en el servidor');
@@ -196,10 +190,7 @@ let EventsStore = Reflux.createStore({
       this.updateLocalEvent(id, event);
       EventsActions.update.completed(event);
     }).fail((error) => {
-      if(error.status == 401) {
-        UsersActions.logout();
-        EventsActions.update.failed('Su session ha finalizado');
-      } else if(error.status == 400) {
+      if(error.status == 400 || erros.status == 401) {
         EventsActions.update.failed(error.responseJSON.message);
       } else {
         EventsActions.update.failed('Error en el servidor');
@@ -214,10 +205,7 @@ let EventsStore = Reflux.createStore({
     }).done((response) => {
       this.removeLocalEvent(id);
     }).fail((error) => {
-      if(error.status == 401) {
-        UsersActions.logout();
-        EventsActions.update.failed('Su session ha finalizado');
-      } else if(error.status == 400) {
+      if(error.status == 400 || erros.status == 401) {
         EventsActions.update.failed(error.responseJSON.message);
       } else {
         EventsActions.update.failed('Error en el servidor');
@@ -236,10 +224,7 @@ let EventsStore = Reflux.createStore({
       this.addLocalMember(eventId, member);
       EventsActions.addMember.completed();
     }).fail((error) => {
-      if(error.status == 401) {
-        UsersActions.logout();
-        EventsActions.addMember.failed('Su session ha finalizado');
-      } else if(error.status == 400) {
+      if(error.status == 400 || erros.status == 401) {
         EventsActions.addMember.failed(error.responseJSON.message);
       } else {
         EventsActions.addMember.failed('Error en el servidor');
@@ -261,10 +246,7 @@ let EventsStore = Reflux.createStore({
       this.removeLocalMember(eventId, memberId);
       EventsActions.removeMember.completed();
     }).fail((error) => {
-      if(error.status == 401) {
-        UsersActions.logout();
-        EventsActions.removeMember.failed('Su session ha finalizado');
-      } else if(error.status == 400) {
+      if(error.status == 400 || erros.status == 401) {
         EventsActions.removeMember.failed(error.responseJSON.message);
       } else {
         EventsActions.removeMember.failed('Error en el servidor');
@@ -285,10 +267,7 @@ let EventsStore = Reflux.createStore({
       this.addLocalResource(eventId, resource);
       EventsActions.addResource.completed();
     }).fail((error) => {
-      if(error.status == 401) {
-        UsersActions.logout();
-        EventsActions.addResource.failed('Su session ha finalizado');
-      } else if(error.status == 400) {
+      if(error.status == 400 || erros.status == 401) {
         EventsActions.addResource.failed(error.responseJSON.message);
       } else {
         EventsActions.addResource.failed('Error en el servidor');
@@ -306,10 +285,7 @@ let EventsStore = Reflux.createStore({
     }).done((resource) => {
       this.removeLocalResource(eventId, resourceId);
     }).fail((error) => {
-      if(error.status == 401) {
-        UsersActions.logout();
-        EventsActions.removeResource.failed('Su session ha finalizado');
-      } else if(error.status == 400) {
+      if(error.status == 400 || erros.status == 401) {
         EventsActions.removeResource.failed(error.responseJSON.message);
       } else {
         EventsActions.removeResource.failed('Error en el servidor');
@@ -328,10 +304,7 @@ let EventsStore = Reflux.createStore({
       this.finishLocalEvent(eventId);
       EventsActions.finishEvent.completed(true);
     }).fail((error) => {
-      if(error.status == 401) {
-        UsersActions.logout();
-        EventsActions.finishEvent.failed('Su session ha finalizado');
-      } else if(error.status == 400) {
+      if(error.status == 400 || erros.status == 401) {
         EventsActions.finishEvent.failed(error.responseJSON.message);
       } else {
         EventsActions.finishEvent.failed('Error en el servidor');

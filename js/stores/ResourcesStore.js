@@ -50,19 +50,13 @@ let ResourcesStore = Reflux.createStore({
     if (_.isEmpty(this.resources) || forceUpdate) {
       $.ajax({
         url: this.url,
-        method: 'GET',
-        xhrFields: {
-            withCredentials : true
-        }
+        method: 'GET'
       }).done((resources) => {
         this.resources = resources;
         this.trigger(this.resources);
         ResourcesActions.getList.completed(resources);
       }).fail((error) => {
-        if(error.status == 401) {
-          UsersActions.logout();
-          ResourcesActions.getList.failed('Su session ha finalizado');
-        } else if(error.status == 400) {
+        if(error.status == 400 || error.status == 401) {
           ResourcesActions.getList.failed(error.responseJSON.message);
         } else {
           ResourcesActions.getList.failed('Error en el servidor');
@@ -86,10 +80,7 @@ let ResourcesStore = Reflux.createStore({
       this.add(resource);
       ResourcesActions.create.completed(resource);
     }).fail((error) => {
-      if(error.status == 401) {
-        UsersActions.logout();
-        ResourcesActions.create.failed('Su session ha finalizado');
-      } else if(error.status == 400) {
+      if(error.status == 400 || error.status == 401) {
         ResourcesActions.create.failed(error.responseJSON.message);
       } else {
         ResourcesActions.create.failed('Error en el servidor');
@@ -134,10 +125,7 @@ let ResourcesStore = Reflux.createStore({
       this.update(id, resource);
       ResourcesActions.update.completed(resource);
     }).fail((error) => {
-      if(error.status == 401) {
-        UsersActions.logout();
-        ResourcesActions.update.failed('Su session ha finalizado');
-      } else if(error.status == 400) {
+      if(error.status == 400 || error.status == 401) {
         ResourcesActions.update.failed(error.responseJSON.message);
       } else {
         ResourcesActions.update.failed('Error en el servidor');
@@ -156,10 +144,7 @@ let ResourcesStore = Reflux.createStore({
       this.remove(id);
       ResourcesActions.delete.completed();
     }).fail((error) => {
-      if(error.status == 401) {
-        UsersActions.logout();
-        ResourcesActions.delete.failed('Su session ha finalizado');
-      } else if(error.status == 400) {
+      if(error.status == 400 || error.status == 401) {
         ResourcesActions.delete.failed(error.responseJSON.message);
       } else {
         ResourcesActions.delete.failed('Error en el servidor');
