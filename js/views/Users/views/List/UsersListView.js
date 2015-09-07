@@ -14,7 +14,7 @@ let UsersListView = React.createClass({
   ],
   
   getInitialState() {
-    return {usersStore: {users: []}, filter: ''};
+    return {filter: ''};
   },
 
   componentDidMount() {
