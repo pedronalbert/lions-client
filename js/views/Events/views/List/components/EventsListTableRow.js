@@ -2,6 +2,7 @@ import React from 'react';
 import {ButtonToolbar, Button} from 'react-bootstrap';
 import FontAwesome from 'react-fontawesome'
 import EventsActions from '../../../../../actions/EventsActions';
+import UsersActions from '../../../../../actions/UsersActions';
 import {Navigation} from 'react-router';
 import Moment from 'moment';
 import MomentLocale from 'moment/locale/es';
@@ -9,8 +10,21 @@ import MomentLocale from 'moment/locale/es';
 let EventsListTableRow = React.createClass({
   mixins: [Navigation],
 
+  getInitialState() {
+    return {loggedUser: {}};
+  },
+
   componenWillMount() {
     Moment.locale('es');
+  },
+
+  componentDidMount() {
+    UsersActions
+      .getLoggedUser
+      .triggerPromise()
+      .then((user) => {
+        this.setState({loggedUser: user});
+      });
   },
 
   handleDelete(id) {
@@ -42,14 +56,25 @@ let EventsListTableRow = React.createClass({
   render() {
     let eventDate = this.parseEventDate(this.props.event.date);
     let eventHour = this.parseEventHour(this.props.event.date);
-    let editButton;
+    let editButton = null;
+    let adminCol = null;
+
 
     if(this.props.event.active == 1) {
       editButton = <Button bsStyle="primary" bsSize="small" onClick={this.handleEdit.bind(this, this.props.event.id)}>
           <FontAwesome name="pencil" />
         </Button>
-    } else {
-      editButton = '';
+    }
+
+    if(this.state.loggedUser.role == 1) {
+      adminCol = <td>
+        <ButtonToolbar>
+          {editButton}
+          <Button bsStyle="danger" bsSize="small" onClick={this.handleDelete.bind(this, this.props.event.id)}>
+            <FontAwesome name="trash-o" />
+          </Button>
+        </ButtonToolbar>
+      </td>  
     }
     
     return (
@@ -57,14 +82,7 @@ let EventsListTableRow = React.createClass({
         <td>{this.props.event.title}</td>
         <td>{eventDate}</td>
         <td>{eventHour}</td>
-        <td>
-          <ButtonToolbar>
-            {editButton}
-            <Button bsStyle="danger" bsSize="small" onClick={this.handleDelete.bind(this, this.props.event.id)}>
-              <FontAwesome name="trash-o" />
-            </Button>
-          </ButtonToolbar>
-        </td>
+        {adminCol}
       </tr>
     );
   }

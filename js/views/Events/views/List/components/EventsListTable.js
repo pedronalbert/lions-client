@@ -3,12 +3,22 @@ import {Table, Well, Input} from 'react-bootstrap';
 import EventsListTableRow from './EventsListTableRow';
 import Radium from 'radium';
 import _ from 'lodash';
+import UsersActions from '../../../../../actions/UsersActions';
 
 let EventsListTable = React.createClass({
   mixins: [React.addons.LinkedStateMixin],
 
   getInitialState() {
-    return {wordFilter: ''};
+    return {wordFilter: '', loggedUser: {}};
+  },
+
+  componentDidMount() {
+    UsersActions
+      .getLoggedUser
+      .triggerPromise()
+      .then((user) => {
+        this.setState({loggedUser: user});
+      });
   },
 
   getFilteredEvents(wordFilter) {
@@ -32,6 +42,11 @@ let EventsListTable = React.createClass({
   render() {
     if(this.props.events.length > 0) {
       let filteredEvents = this.getFilteredEvents(this.state.wordFilter);
+      let adminCol = null;
+
+      if(this.state.loggedUser.role == 1) {
+        adminCol = <th style={styles.adminCol}>Administrar</th>
+      }
 
       return  (
         <div>
@@ -47,7 +62,7 @@ let EventsListTable = React.createClass({
                 <th>Titulo</th>
                 <th>Dia</th>
                 <th>Hora</th>
-                <th style={styles.adminCol}>Administrar</th>
+                {adminCol}
               </tr>
             </thead>
 

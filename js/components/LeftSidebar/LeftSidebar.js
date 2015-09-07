@@ -6,6 +6,19 @@ import {ButtonToolbar, Button} from 'react-bootstrap';
 import UsersActions from '../../actions/UsersActions';
 
 let LeftSidebar = React.createClass({
+  getInitialState() {
+    return {loggedUser: {}};
+  },
+
+  componentDidMount() {
+    UsersActions
+      .getLoggedUser
+      .triggerPromise()
+      .then((user) => {
+        this.setState({loggedUser: user});
+      })
+  },
+
   handleLogout() {
     UsersActions
       .logout()
@@ -17,7 +30,7 @@ let LeftSidebar = React.createClass({
         <img style={styles.logo} src="./img/logo.png" />
       </div>
       <div style={styles.label} >
-        <div style={styles.welcome}>Bienvenido Alberto</div>
+        <div style={styles.welcome}>Bienvenido {this.state.loggedUser.name}</div>
         <div style={styles.logout}>
           <Button bsStyle="danger" onClick={this.handleLogout} >
             <FontAwesome name="power-off" />

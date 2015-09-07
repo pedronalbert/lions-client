@@ -1,12 +1,26 @@
 import React from 'react';
 import {Table, Well} from 'react-bootstrap';
 import MembersTableRow from './MembersTableRow';
+import UsersActions from '../../../../../actions/UsersActions';
 import _ from 'lodash';
 import Radium from 'radium';
 
 let MembersTable = React.createClass({
   getInitialProps() {
     return {members: [], filter: ''};
+  },
+
+  getInitialState() {
+    return {loggedUser: {}};
+  },
+
+  componentDidMount() {
+    UsersActions
+      .getLoggedUser
+      .triggerPromise()
+      .then((user) => {
+        this.setState({loggedUser: user});
+      });
   },
 
   getFilteredMembers(filter) {
@@ -29,6 +43,11 @@ let MembersTable = React.createClass({
 
   render() {
     let members = this.getFilteredMembers(this.props.filter);
+    let adminCol = null;
+
+    if(this.state.loggedUser.role == 1) {
+      adminCol = <th style={styles.adminCol}>Editar</th>
+    }
 
     if (this.props.members.length > 0) {
       return (
@@ -39,7 +58,7 @@ let MembersTable = React.createClass({
             <th>Cedula</th>
             <th>Correo</th>
             <th>Telefono</th>
-            <th style={styles.adminCol}>Editar</th>
+            {adminCol}
           </tr>
 
           <tbody>
