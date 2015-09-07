@@ -14,7 +14,7 @@ let LogsTable = React.createClass({
     let pageIndexMin = pageIndexMax - 20;
 
     let logs = _.filter(this.props.logs, (logs, index) => {
-      if(index > pageIndexMin && index < pageIndexMax) {
+      if(index >= pageIndexMin && index <= pageIndexMax) {
         return true;
       }
     });

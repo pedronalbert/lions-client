@@ -34,7 +34,6 @@ let MembersLisView = React.createClass({
           type="text" 
           style={styles.inputSearch}
           valueLink={this.linkState('filterWord')}
-          label="Buscar"
           placeholder="Nombre, Apellido o Cedula..." 
           addonBefore={InputAddon} />
 
