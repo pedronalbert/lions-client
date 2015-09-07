@@ -6,6 +6,7 @@ import UsersActions from '../../../../../actions/UsersActions';
 import {Navigation} from 'react-router';
 import Moment from 'moment';
 import MomentLocale from 'moment/locale/es';
+import Alertify from 'alertifyjs';
 
 let EventsListTableRow = React.createClass({
   mixins: [Navigation],
@@ -28,11 +29,24 @@ let EventsListTableRow = React.createClass({
   },
 
   handleDelete(id) {
-    let confirm = window.confirm('¿Está seguro de que desea eliminar este evento?');
+    const message = '¿Está seguro de que desea eliminar este evento?';
 
-    if(confirm) {
-      EventsActions.delete(id);
-    }
+    Alertify.defaults.glossary.title = 'Precaucion';
+    Alertify.defaults.glossary.ok = 'SI';
+    Alertify.defaults.glossary.cancel = 'NO';
+
+    Alertify
+      .confirm(message)
+      .set('onok', (closeEvent) => {
+
+        EventsActions
+          .delete
+          .triggerPromise(id)
+          .then((response) => {
+            window.toastr.success('Evento ha sido eliminado');
+            this.transitionTo('events');
+          });
+      })
   },
 
   handleEdit(id) {

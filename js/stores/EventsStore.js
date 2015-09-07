@@ -204,6 +204,7 @@ let EventsStore = Reflux.createStore({
       method: 'DELETE'
     }).done((response) => {
       this.removeLocalEvent(id);
+      EventsActions.delete.completed();
     }).fail((error) => {
       if(error.status == 400 || erros.status == 401) {
         EventsActions.update.failed(error.responseJSON.message);
