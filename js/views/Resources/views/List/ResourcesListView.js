@@ -1,12 +1,13 @@
-import React from 'react/addons';
-import Reflux from 'reflux';
-import ResourcesStore from '../../../../stores/ResourcesStore';
-import ResourcesActions from '../../../../actions/ResourcesActions'; 
+/*---Dependencies---*/
 import FontAwesome from 'react-fontawesome';
 import Radium from 'radium';
+import React from 'react/addons';
+import Reflux from 'reflux';
 import {Input} from 'react-bootstrap';
 
-//Components
+/*---Components---*/
+import ResourcesActions from '../../../../actions/ResourcesActions'; 
+import ResourcesStore from '../../../../stores/ResourcesStore';
 import ResourcesTable from './components/ResourcesTable';
 
 let ResourcesListView = React.createClass({
@@ -16,7 +17,7 @@ let ResourcesListView = React.createClass({
   ],
   
   getInitialState() {
-    return {resources: [], filterWord: ''};
+    return {filterWord: ''};
   },
 
   componentDidMount() {
