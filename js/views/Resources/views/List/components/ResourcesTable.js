@@ -1,43 +1,21 @@
+/*---Dependencies---*/
+import _ from 'lodash';
+import Radium from 'radium';
 import React from 'react';
+import Reflux from 'reflux';
+import ResourcesTableRow from './ResourcesTableRow';
+import {Table, Well} from 'react-bootstrap';
+
+/*---Components---*/
 import ResourcesActions from '../../../../../actions/ResourcesActions';
 import UsersActions from '../../../../../actions/UsersActions';
-import {Table, Well} from 'react-bootstrap';
-import ResourcesTableRow from './ResourcesTableRow';
-import Radium from 'radium';
-import _ from 'lodash';
+import UsersStore from '../../../../../stores/UsersStore';
 
 let ResourcesTable = React.createClass({
+  mixins:[Reflux.connect(UsersStore, 'usersStore')],
 
-  getInitialState() {
-    return {loggedUser: {}};
-  },
-
-  componentDidMount() {
-    ResourcesActions.getList();
-    UsersActions
-      .getLoggedUser
-      .triggerPromise()
-      .then((user) => {
-        this.setState({loggedUser: user});
-      });
-  },
-
-  getFilteredResources(filter) {
-    let resources;
-
-    if (_.isEmpty(filter)) {
-      resources = this.props.resources;
-    } else {
-      let reg = new RegExp(filter);
-
-      resources = _.filter((this.props.resources), (resource) => {
-        if (reg.test(resource.type)) {
-          return true
-        };
-      });
-    }
-
-    return resources;
+  componentWillMount() {
+    UsersActions.getLoggedUser();
   },
 
   render() {
@@ -46,7 +24,7 @@ let ResourcesTable = React.createClass({
     if (this.props.resources.length > 0) {
       let adminCol = null;
 
-      if(this.state.loggedUser.role == 1) {
+      if(this.state.usersStore.loggedUser.role == 1) {
         adminCol = <th style={styles.adminCol}>Administrar</th>
       }
       
@@ -74,7 +52,26 @@ let ResourcesTable = React.createClass({
         No hay recursos en el inventario!
       </Well>
     }
-  }
+  },
+
+  getFilteredResources(filter) {
+    let resources;
+
+    if (_.isEmpty(filter)) {
+      resources = this.props.resources;
+    } else {
+      let reg = new RegExp(filter);
+
+      resources = _.filter((this.props.resources), (resource) => {
+        if (reg.test(resource.type)) {
+          return true
+        };
+      });
+    }
+
+    return resources;
+  },
+
 });
 
 let styles = {

@@ -20,7 +20,7 @@ let ResourcesListView = React.createClass({
     return {filterWord: ''};
   },
 
-  componentDidMount() {
+  componentWillMount() {
     ResourcesActions.getList();
   },
 
