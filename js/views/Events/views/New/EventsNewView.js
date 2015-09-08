@@ -29,8 +29,8 @@ let MembersNewView = React.createClass({
 
   getInitialState() {
     return {
-      formButton: {disabled: false, style: 'primary'}, 
-      location: 'Local'
+      formButton: {disabled: false, style: 'primary'},
+      sector:'Sector1'
     };
   },
 
@@ -47,10 +47,10 @@ let MembersNewView = React.createClass({
             timeFormat="YYYY-MM-DD hh:mm a" 
             onChange={this.handleDateChange} />
         </div>
-        <Input type="text" valueLink={this.linkState('sector')} label="Sector" placeholder="Sector" />
-        <Input type="select" valueLink={this.linkState('location')} label="Lugar">
-          <option value="Local">Local</option>
-          <option value="Cancha">Cancha</option>
+        <Input type="text" valueLink={this.linkState('location')} label="Lugar" placeholder="Lugar" />
+        <Input type="select" valueLink={this.linkState('sector')} label="Sector">
+          <option value="Sector1">Sector1</option>
+          <option value="Sector2">Sector2</option>
         </Input>
         <ButtonInput 
           type="submit" 

@@ -76,10 +76,10 @@ let EventsEditView = React.createClass({
                     onChange={this.handleDateChange}
                   />
                 </div>
-                <Input type="text" valueLink={this.deepLinkState(['event', 'sector'])} label="Sector" placeholder="Sector" />
-                <Input type="select" valueLink={this.deepLinkState(['event', 'location'])} label="Lugar">
-                  <option value="Local">Local</option>
-                  <option value="Cancha">Cancha</option>
+                <Input type="text" valueLink={this.linkState('location')} label="Lugar" placeholder="Lugar" />
+                <Input type="select" valueLink={this.linkState('sector')} label="Sector">
+                  <option value="Sector1">Sector1</option>
+                  <option value="Sector2">Sector2</option>
                 </Input>
                 <ButtonInput 
                   type="submit" 

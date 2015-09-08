@@ -17,11 +17,11 @@ let MembersEditView = React.createClass({
   ],
 
   validatorTypes: {
-    first_name: Joi.string().required().label('Nombre'),
-    last_name: Joi.string().required().label('Apelido'),
-    ci: Joi.required().label('Cedula'),
+    first_name: Joi.string().regex(/^[a-zA-Z ]+$/).required().label('Nombre'),
+    last_name: Joi.string().regex(/^[a-zA-Z ]+$/).required().label('Apelido'),
+    ci: Joi.number().max(99999999).required().label('Cedula'),
     email: Joi.string().email().required().label('Correo'),
-    phone: Joi.required().label('Telefono')
+    phone: Joi.number().max(99999999999).required().label('Telefono')
   },
 
   propTypes: {
