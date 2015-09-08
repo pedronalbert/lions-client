@@ -32,13 +32,8 @@ let ResourcesStore = Reflux.createStore({
   },
 
   add(resource) {
-    ResourcesActions
-      .getList
-      .triggerPromise()
-      .then((resources) => {
-        this.resources.push(resource);
-        this.trigger(this.resources);
-      })
+    this.resources.push(resource);
+    this.trigger(this.resources);
   },
 
   update(id, data) {
@@ -51,8 +46,8 @@ let ResourcesStore = Reflux.createStore({
     this.trigger(this.resources);
   },
 
-  onGetList() {
-    if (!this.fetchedFromServer) {
+  onGetList(force = false) {
+    if (!this.fetchedFromServer || force) {
       $.ajax({
         url: this.url,
         method: 'GET'
@@ -78,10 +73,7 @@ let ResourcesStore = Reflux.createStore({
     $.ajax({
       url: this.url,
       method: 'POST',
-      data: data,
-      xhrFields : {
-        withCredentials : true
-     }
+      data: data
     }).done((resource) => {
       this.add(resource);
       ResourcesActions.create.completed(resource);
@@ -123,10 +115,7 @@ let ResourcesStore = Reflux.createStore({
     $.ajax({
       url: this.url + '/' + id,
       method: 'PUT',
-      data: data,
-      xhrFields : {
-        withCredentials : true
-     }
+      data: data
     }).done((resource) => {
       this.update(id, resource);
       ResourcesActions.update.completed(resource);

@@ -13,13 +13,15 @@ let MembersNewView = React.createClass({
     React.addons.LinkedStateMixin,
     Navigation
   ],
-
+  //nombre y apellido que no acepte numeros
+  //sector sea seleccionable
+  //lugar input
   validatorTypes: {
     first_name: Joi.string().required().label('Nombre'),
     last_name: Joi.string().required().label('Apelido'),
-    ci: Joi.required().label('Cedula'),
+    ci: Joi.number().max(8).required().label('Cedula'),
     email: Joi.string().email().required().label('Correo'),
-    phone: Joi.required().label('Telefono')
+    phone: Joi.number().max(11).required().label('Telefono')
   },
 
   propTypes: {
