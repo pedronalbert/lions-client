@@ -24,6 +24,7 @@ import ResourcesActions from '../../../../actions/ResourcesActions';
 import ResourcesStore from '../../../../stores/ResourcesStore';
 import SelectableMembers from './components/SelectableMembers';
 import SelectableResources from './components/SelectableResources'; 
+import SectorsMixin from '../../components/SectorsMixin';
 
 let EventsEditView = React.createClass({
   mixins: [
@@ -32,7 +33,8 @@ let EventsEditView = React.createClass({
     React.addons.LinkedStateMixin,
     Reflux.connect(MembersStore, 'members'),
     Reflux.connect(ResourcesStore, 'resources'),
-    Reflux.listenTo(EventsStore, 'onEventsStoreChange')
+    Reflux.listenTo(EventsStore, 'onEventsStoreChange'),
+    SectorsMixin
   ],
 
   propTypes: {
@@ -58,6 +60,8 @@ let EventsEditView = React.createClass({
   },
 
   render() {
+    let sectors = this.getSectors();
+
     return (
       <div>
         <h3 className="page-title"><FontAwesome name="calendar-plus-o" /> Editar Informacion del Evento</h3>
@@ -76,10 +80,11 @@ let EventsEditView = React.createClass({
                     onChange={this.handleDateChange}
                   />
                 </div>
-                <Input type="text" valueLink={this.linkState('location')} label="Lugar" placeholder="Lugar" />
-                <Input type="select" valueLink={this.linkState('sector')} label="Sector">
-                  <option value="Sector1">Sector1</option>
-                  <option value="Sector2">Sector2</option>
+                <Input type="text" valueLink={this.deepLinkState(['event', 'location'])} label="Lugar" placeholder="Lugar" />
+                <Input type="select" valueLink={this.deepLinkState(['event', 'sector'])} label="Sector">
+                  {sectors.map((sector) => {
+                    return <option value={sector.name}>{sector.name}</option>
+                  })}
                 </Input>
                 <ButtonInput 
                   type="submit" 

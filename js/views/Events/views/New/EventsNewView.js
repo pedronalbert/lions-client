@@ -8,6 +8,7 @@ import Validation from 'react-validation-mixin';
 import ValidationStrategy from 'joi-validation-strategy';
 import {Input, ButtonInput, Row, Col} from 'react-bootstrap';
 import {Navigation} from 'react-router';
+import SectorsMixin from '../../components/SectorsMixin';
 
 /*---Components---*/
 import EventsActions from '../../../../actions/EventsActions';
@@ -15,6 +16,7 @@ import EventsActions from '../../../../actions/EventsActions';
 let MembersNewView = React.createClass({
   mixins: [
     React.addons.LinkedStateMixin,
+    SectorsMixin,
     Navigation
   ],
 
@@ -30,11 +32,13 @@ let MembersNewView = React.createClass({
   getInitialState() {
     return {
       formButton: {disabled: false, style: 'primary'},
-      sector:'Sector1'
+      sector:'Aldea la Ranchera'
     };
   },
 
   render() {
+    let sectors = this.getSectors();
+
     return <div style={styles.base}>
       <h3 className="page-title"><FontAwesome name="calendar-plus-o" /> Registrar Evento</h3>
       <form onSubmit={this.onSubmit}>
@@ -49,8 +53,9 @@ let MembersNewView = React.createClass({
         </div>
         <Input type="text" valueLink={this.linkState('location')} label="Lugar" placeholder="Lugar" />
         <Input type="select" valueLink={this.linkState('sector')} label="Sector">
-          <option value="Sector1">Sector1</option>
-          <option value="Sector2">Sector2</option>
+          {sectors.map((sector) => {
+            return <option value={sector.name}>{sector.name}</option>
+          })}
         </Input>
         <ButtonInput 
           type="submit" 
