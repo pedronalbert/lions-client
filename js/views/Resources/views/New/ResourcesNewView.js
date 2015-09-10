@@ -31,7 +31,12 @@ let ResourcesNewView = React.createClass({
   },
 
   getInitialState() {
-    return {formButton: {disabled: false, style: 'primary'}};
+    return {
+      formButton: {disabled: false, style: 'primary'},
+      available: 0,
+      using: 0,
+      damaged: 0
+    };
   },
 
   getValidatorData() {
@@ -95,9 +100,9 @@ let ResourcesNewView = React.createClass({
       <h3 className="page-title"><FontAwesome name="cart-plus" /> Registrar Recurso</h3>
       <form onSubmit={this.onSubmit}>
         <Input valueLink={this.linkState('type')} type="text" label="Tipo" placeholder="Tipo"/>
-        <Input valueLink={this.linkState('available')} type="text" label="Disponibles" placeholder="Disponibles"/>
-        <Input valueLink={this.linkState('using')} type="text" label="Usando" placeholder="Usando"/>
-        <Input valueLink={this.linkState('damaged')} type="text" label="Dañados" placeholder="Dañados"/>
+        <Input valueLink={this.linkState('available')} type="number" min={0} label="Disponibles" placeholder="Disponibles"/>
+        <Input valueLink={this.linkState('using')} type="number" min={0} label="Usando" placeholder="Usando"/>
+        <Input valueLink={this.linkState('damaged')} type="number" min={0} label="Dañados" placeholder="Dañados"/>
         <ButtonInput 
           type="submit" 
           bsStyle={this.state.formButton.style} 

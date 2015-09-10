@@ -109,9 +109,9 @@ let ResourcesEditView = React.createClass({
       <h3 className="page-title"><FontAwesome name="cart-plus" /> Editar Recurso</h3>
       <form onSubmit={this.onSubmit}>
         <Input valueLink={this.deepLinkState(['resource', 'type'])} type="text" label="Tipo" placeholder="Tipo"/>
-        <Input valueLink={this.deepLinkState(['resource', 'available'])} type="text" label="Disponibles" placeholder="Disponibles"/>
-        <Input valueLink={this.deepLinkState(['resource', 'using'])} type="text" label="Usando" placeholder="Usando"/>
-        <Input valueLink={this.deepLinkState(['resource', 'damaged'])} type="text" label="Dañados" placeholder="Dañados"/>
+        <Input valueLink={this.deepLinkState(['resource', 'available'])} type="number" min={0} label="Disponibles" placeholder="Disponibles"/>
+        <Input valueLink={this.deepLinkState(['resource', 'using'])} type="number" min={0} label="Usando" placeholder="Usando"/>
+        <Input valueLink={this.deepLinkState(['resource', 'damaged'])} type="number" min={0} label="Dañados" placeholder="Dañados"/>
         <ButtonInput 
           type="submit" 
           bsStyle={this.state.formButton.style} 
