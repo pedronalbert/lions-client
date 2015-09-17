@@ -6,7 +6,7 @@ import MomentLocale from 'moment/locale/es';
 import React from 'react';
 import Reflux from 'reflux';
 import {ButtonToolbar, Button} from 'react-bootstrap';
-import {Navigation} from 'react-router';
+import {History} from 'react-router';
 
 /*---Components---*/
 import EventsActions from '../../../../../actions/EventsActions';
@@ -15,7 +15,7 @@ import UsersStore from '../../../../../stores/UsersStore';
 
 let EventsListTableRow = React.createClass({
   mixins: [
-    Navigation,
+    History,
     Reflux.connect(UsersStore, 'usersStore')
   ],
 
@@ -75,7 +75,7 @@ let EventsListTableRow = React.createClass({
           .triggerPromise(id)
           .then((response) => {
             window.toastr.success('Evento ha sido eliminado');
-            this.transitionTo('events');
+            this.history.pushState(null, 'events');
           });
       })
   },
@@ -83,7 +83,7 @@ let EventsListTableRow = React.createClass({
   handleEdit(id) {
     let route = 'events/' + id + '/edit';
 
-    this.transitionTo(route);
+    this.history.pushState(null, route);
   },
 
   parseEventDate(date) {

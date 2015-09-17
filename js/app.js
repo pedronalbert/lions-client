@@ -1,6 +1,5 @@
 import React from 'react';
-import { Router, Route, Link , State, Navigation} from 'react-router';
-import { history } from 'react-router/lib/HashHistory';
+import { Router, Route, Link , State, History} from 'react-router';
 import LeftSidebar from './components/LeftSidebar/LeftSidebar';
 import Reflux from 'reflux';
 import _ from 'lodash';
@@ -27,7 +26,7 @@ import LogsListView from './views/Logs/LogsListView';
 let App = React.createClass({ 
   mixins: [
     State,
-    Navigation,
+    History,
     Reflux.ListenerMixin
   ],
 
@@ -72,7 +71,7 @@ let App = React.createClass({
 });
 
 React.render((
-  <Router history={history}>
+  <Router>
     <Route path="/" component={App}>
       <Route path="members" component={MembersListView} />
       <Route path="members/:id/edit" component={MembersEditView} />

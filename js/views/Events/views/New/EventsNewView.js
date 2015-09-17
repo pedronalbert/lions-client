@@ -7,7 +7,7 @@ import React from 'react/addons';
 import Validation from 'react-validation-mixin';
 import ValidationStrategy from 'joi-validation-strategy';
 import {Input, ButtonInput, Row, Col} from 'react-bootstrap';
-import {Navigation} from 'react-router';
+import {History} from 'react-router';
 import SectorsMixin from '../../components/SectorsMixin';
 
 /*---Components---*/
@@ -17,7 +17,7 @@ let MembersNewView = React.createClass({
   mixins: [
     React.addons.LinkedStateMixin,
     SectorsMixin,
-    Navigation
+    History
   ],
 
   propTypes: {
@@ -84,7 +84,7 @@ let MembersNewView = React.createClass({
           .triggerPromise(data)
           .then((event) => {
             window.toastr.success('Evento registrado exitosamente');
-            this.transitionTo('events/' + event.id + '/edit');
+            this.history.pushState(null, 'events/' + event.id + '/edit');
           })
           .catch((error) => {
             window.toastr.error(error, 'ERROR!');

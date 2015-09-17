@@ -6,13 +6,13 @@ import FontAwesome from 'react-fontawesome';
 import Validation from 'react-validation-mixin';
 import ValidationStrategy from 'joi-validation-strategy';
 import Joi from 'joi';
-import {Navigation} from 'react-router';
+import {History} from 'react-router';
 import DeepLinkedStateMixin from 'react-deep-link-state';
 
 let MembersEditView = React.createClass({
   mixins: [
     React.addons.LinkedStateMixin,
-    Navigation,
+    History,
     DeepLinkedStateMixin
   ],
 
@@ -72,7 +72,7 @@ let MembersEditView = React.createClass({
           .triggerPromise(this.props.params.id, data)
           .then((response) => {
             window.toastr.success('Usuario actualizado exitosamente');
-            this.transitionTo('users');
+            this.history.pushState(null, 'users');
           })
           .catch((error) => {
             window.toastr.error(error, 'ERROR!');

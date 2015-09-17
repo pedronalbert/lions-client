@@ -6,7 +6,7 @@ import DeepLinkedStateMixin from 'react-deep-link-state';
 import Validation from 'react-validation-mixin';
 import ValidationStrategy from 'joi-validation-strategy';
 import {Input, ButtonInput, ButtonToolbar, Button, Table, Row, Col, Tabs, Tab} from 'react-bootstrap';
-import {Navigation} from 'react-router';
+import {History} from 'react-router';
 
 /*---Components---*/
 import EventMembers from './components/EventMembers';
@@ -29,7 +29,7 @@ import SectorsMixin from '../../components/SectorsMixin';
 let EventsEditView = React.createClass({
   mixins: [
     DeepLinkedStateMixin,
-    Navigation,
+    History,
     React.addons.LinkedStateMixin,
     Reflux.connect(MembersStore, 'members'),
     Reflux.connect(ResourcesStore, 'resources'),
@@ -189,7 +189,7 @@ let EventsEditView = React.createClass({
           .triggerPromise(this.state.event.id)
           .then((response) => {
             window.toastr.success('El evento ha sido marcado como finalizado!');
-            this.transitionTo('events');
+            this.history.pushState(null, 'events');
           })
           .catch((error) => {
             window.toastr.error(error, 'ERROR!');

@@ -6,12 +6,12 @@ import FontAwesome from 'react-fontawesome';
 import Validation from 'react-validation-mixin';
 import ValidationStrategy from 'joi-validation-strategy';
 import Joi from 'joi';
-import {Navigation} from 'react-router';
+import {History} from 'react-router';
 
 let MembersNewView = React.createClass({
   mixins: [
     React.addons.LinkedStateMixin,
-    Navigation
+    History
   ],
 
   validatorTypes: {
@@ -62,7 +62,7 @@ let MembersNewView = React.createClass({
           .triggerPromise(data)
           .then((response) => {
             window.toastr.success('Miembro registrado exitosamente');
-            this.transitionTo('members');
+            this.history.pushState(null, 'members');
           })
           .catch((error) => {
             window.toastr.error(error, 'ERROR!');

@@ -6,12 +6,12 @@ import FontAwesome from 'react-fontawesome';
 import Validation from 'react-validation-mixin';
 import ValidationStrategy from 'joi-validation-strategy';
 import Joi from 'joi';
-import {Navigation} from 'react-router';
+import {History} from 'react-router';
 
 let ResourcesNewView = React.createClass({
   mixins: [
     React.addons.LinkedStateMixin,
-    Navigation
+    History
   ],
 
   validatorTypes: {
@@ -65,7 +65,7 @@ let ResourcesNewView = React.createClass({
           .triggerPromise(data)
           .then((response) => {
             window.toastr.success('Recurso registrado exitosamente');
-            this.transitionTo('resources');
+            this.history.pushState(null, 'resources');
           })
           .catch((response) => {
             window.toastr.error(response, 'ERROR!');

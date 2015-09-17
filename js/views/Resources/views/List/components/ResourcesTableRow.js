@@ -5,7 +5,7 @@ import Radium from 'radium';
 import React from 'react';
 import Reflux from 'reflux';
 import {Button, ButtonToolbar} from 'react-bootstrap'; 
-import {Navigation} from 'react-router';
+import {History} from 'react-router';
 
 /*---Components---*/
 import ResourcesActions from '../../../../../actions/ResourcesActions';
@@ -14,14 +14,14 @@ import UsersStore from '../../../../../stores/UsersStore';
 
 let ResourcesTableRow = React.createClass({
   mixins: [
-    Navigation,
+    History,
     Reflux.connect(UsersStore, 'usersStore')
   ],
 
   handleEdit(id) {
     let route = 'resources/' + id + '/edit';
 
-    this.transitionTo(route);
+    this.history.pushState(null, route);
   },
 
   componentWillMount() {

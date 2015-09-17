@@ -1,18 +1,18 @@
 import React from 'react';
 import {Button, ButtonToolbar} from 'react-bootstrap';
 import FontAwesome from 'react-fontawesome';
-import {Navigation} from 'react-router';
+import {History} from 'react-router';
 import UsersActions from '../../../../../actions/UsersActions';
 import Alertify from 'alertifyjs';
 import _ from 'lodash';
 
 let UsersTableRow = React.createClass({
-  mixins: [Navigation],
+  mixins: [History],
 
   handleEdit(id) {
     let route = 'users/' + id + '/edit';
 
-    this.transitionTo(route);
+    this.history.pushState(null, route);
   },
 
   handleDelete(id) {

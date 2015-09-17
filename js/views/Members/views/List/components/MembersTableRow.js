@@ -4,7 +4,7 @@ import FontAwesome from 'react-fontawesome';
 import React from 'react';
 import Reflux from 'reflux';
 import {Button, ButtonToolbar} from 'react-bootstrap';
-import {Navigation} from 'react-router';
+import {History} from 'react-router';
 
 /*---Components---*/
 import MembersActions from '../../../../../actions/MembersActions';
@@ -13,7 +13,7 @@ import UsersStore from '../../../../../stores/UsersStore';
 
 let MembersTableRow = React.createClass({
   mixins: [
-    Navigation,
+    History,
     Reflux.connect(UsersStore, 'usersStore')
   ],
 
@@ -72,7 +72,7 @@ let MembersTableRow = React.createClass({
   handleEdit(id) {
     let route = 'members/' + id + '/edit';
 
-    this.transitionTo(route);
+    this.history.pushState(null, route);
   }
 });
 

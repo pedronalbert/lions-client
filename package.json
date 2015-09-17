@@ -37,7 +37,7 @@
     "react-datetime": "^1.2.1",
     "react-deep-link-state": "0.0.2",
     "react-fontawesome": "^0.2.5",
-    "react-router": "^1.0.0-beta3",
+    "react-router": "^1.0.0-rc1",
     "react-validation-mixin": "^5.0.4",
     "reflux": "^0.2.12",
     "vinyl-buffer": "^1.0.0",

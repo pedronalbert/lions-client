@@ -4,12 +4,12 @@ import {Row, Col, Input, Button, ButtonInput} from 'react-bootstrap';
 import FontAwesome from 'react-fontawesome';
 import UsersActions from '../../actions/UsersActions';
 import UsersStore from '../../stores/UsersStore';
-import {Navigation} from 'react-router';
+import {History} from 'react-router';
 
 let LoginView = React.createClass({
   mixins: [
     React.addons.LinkedStateMixin,
-    Navigation
+    History
   ],
 
   getInitialState() {
@@ -25,7 +25,7 @@ let LoginView = React.createClass({
       .login
       .triggerPromise(this.state.email, this.state.password)
       .then((user) => {
-        this.transitionTo('events');
+        this.history.pushState(null, 'events');
       })
       .catch((error) => {
         window.toastr.error(error, 'ERROR!');
