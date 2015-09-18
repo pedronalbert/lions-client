@@ -20,15 +20,16 @@ let MenuItem = React.createClass({
 let styles = {
   link: {
     textDecoration: 'none',
-    color: 'inherit'
+    color: 'white'
   },
 
   base: {
-    padding: '12px 35px',
-    fontSize: '17px',
+    padding: '12px 0px 12px 45px',
+    fontSize: '16px',
 
     ':hover': {
-      background: '#0065BB'
+      padding: '12px 0px 12px 52px',
+      fontWeight: '600'
     }
   }, 
 

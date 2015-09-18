@@ -25,7 +25,7 @@ let Menu = React.createClass({
         <MenuItem href="/events/new" text="Registrar Evento" icon="calendar-plus-o" />
 
         <div style={styles.title}><FontAwesome name="cubes" /> Inventario</div>
-        <MenuItem href="/resources" text="Lista de Recursos" icon="list" />
+        <MenuItem href="/resources" text="Lista de Recursos" icon="list-ul" />
         <MenuItem href="/resources/new" text="Registrar Recurso" icon="cart-plus" />
 
         <div style={styles.title}><FontAwesome name="users" /> Miembros</div>
@@ -33,7 +33,7 @@ let Menu = React.createClass({
         <MenuItem href="/members/new" text="Registrar Miembro" icon="user-plus" />
 
         <div style={styles.title}><FontAwesome name="user-secret" /> Administracion</div>
-        <MenuItem href="/users" text="Lista de Usuarios" icon="list" />
+        <MenuItem href="/users" text="Lista de Usuarios" icon="list-ul" />
         <MenuItem href="/users/new" text="Registrar Usuario" icon="user-plus" />
         <MenuItem href="/logs" text="Auditoria" icon="heartbeat" />
 
@@ -44,7 +44,7 @@ let Menu = React.createClass({
         <MenuItem href="/events" text="Lista de eventos" icon="list" />
 
         <div style={styles.title}><FontAwesome name="cubes" /> Inventario</div>
-        <MenuItem href="/resources" text="Lista de Recursos" icon="list" />
+        <MenuItem href="/resources" text="Lista de Recursos" icon="list-ul" />
 
         <div style={styles.title}><FontAwesome name="users" /> Miembros</div>
         <MenuItem href="/members" text="Lista de Miembros" icon="list" />
@@ -67,6 +67,8 @@ let styles = {
   title: {
     fontSize: '15px',
     fontWeight: 900,
+    color: '#fff',
+    textShadow: '0px 0px 1px #fff',
     padding: '5px 25px'
   }
 };
