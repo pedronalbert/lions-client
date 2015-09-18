@@ -311,7 +311,7 @@ let EventsStore = Reflux.createStore({
       }
     }).done((resource) => {
       this.finishLocalEvent(eventId);
-      ResourcesActions.getList(true; //Upsate inventory
+      ResourcesActions.getList(true); //Upsate inventory
       EventsActions.finishEvent.completed(true);
     }).fail((error) => {
       if(error.status == 400 || erros.status == 401) {
