@@ -22,6 +22,7 @@ import UsersActions from './actions/UsersActions';
 import UsersEditView from './views/Users/views/Edit/UsersEditView';
 import UsersNewView from './views/Users/views/New/UsersNewView';
 import LogsListView from './views/Logs/LogsListView';
+import BackupsListView from './views/Backups/BackupsListView';
 
 let App = React.createClass({ 
   mixins: [
@@ -88,6 +89,7 @@ React.render((
       <Route path="users/new" component={UsersNewView} />
       <Route path="logs" component={LogsListView} />
       <Route path="events/:id" component={EventsShowView} />
+      <Route path="backups" component={BackupsListView} />
     </Route>
   </Router>
 ), document.getElementById('app'));

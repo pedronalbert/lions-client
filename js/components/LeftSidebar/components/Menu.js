@@ -36,6 +36,7 @@ let Menu = React.createClass({
         <MenuItem href="/users" text="Lista de Usuarios" icon="list-ul" />
         <MenuItem href="/users/new" text="Registrar Usuario" icon="user-plus" />
         <MenuItem href="/logs" text="Auditoria" icon="heartbeat" />
+        <MenuItem href="/backups" text="Respaldos" icon="database" />
 
       </div>
     } else {
