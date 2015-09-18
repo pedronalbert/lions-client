@@ -50,6 +50,7 @@ let LoginView = React.createClass({
                 valueLink={this.linkState('email')}
                 placeholder="Correo"
                 addonBefore={emailAddon}
+                autoFocus
               />
 
               <Input
@@ -82,17 +83,15 @@ let styles = {
   },
 
   loginBox: {
-    width: '360px',
-    height: '400px',
+    width: '320px',
     background: '#fff',
     borderRadius: '8px',
     boxShadow: '0px 0px 5px black',
-    padding: '40px'
+    padding: '15px 40px'
   },
 
   logo: {
-    width: '170px',
-    height: '170px',
+    width: '150px',
     margin: '0px auto 18px auto',
     display: 'block'
   },
