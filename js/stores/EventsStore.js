@@ -210,7 +210,7 @@ let EventsStore = Reflux.createStore({
       method: 'DELETE'
     }).done((response) => {
       this.removeLocalEvent(id);
-      ResourcesActions.getList();
+      ResourcesActions.getList(true);
       EventsActions.delete.completed();
     }).fail((error) => {
       if(error.status == 400 || erros.status == 401) {
@@ -311,7 +311,7 @@ let EventsStore = Reflux.createStore({
       }
     }).done((resource) => {
       this.finishLocalEvent(eventId);
-      ResourcesActions.getList(); //Upsate inventory
+      ResourcesActions.getList(true; //Upsate inventory
       EventsActions.finishEvent.completed(true);
     }).fail((error) => {
       if(error.status == 400 || erros.status == 401) {
