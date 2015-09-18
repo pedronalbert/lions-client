@@ -60,7 +60,7 @@ let styles = {
     overflow: 'auto',
     position: 'absolute',
     bottom: '0px',
-    top: '260px',
+    top: '220px',
     width: '250px'
   },
 

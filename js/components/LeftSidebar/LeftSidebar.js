@@ -49,8 +49,8 @@ let styles = {
   },
 
   logo: {
-    width: '180px',
-    margin: '30px 30px 10px 30px'
+    width: '150px',
+    margin: '15px 45px 10px 45px'
   },
 
   label: {
